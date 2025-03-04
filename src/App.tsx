@@ -1,35 +1,77 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import {useRef, useState} from 'react'
+import { motion } from "framer-motion";
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="bg-neutral-100 py-20">
+          <SlideTabs />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
   )
 }
+
+const SlideTabs = () => {
+    const [position, setPosition] = useState({
+        left: 0,
+        width: 0,
+        opacity: 0,
+    });
+
+    return (
+        <ul
+            onMouseLeave={() => {
+                setPosition((pv) => ({
+                    ...pv,
+                    opacity: 0,
+                }));
+            }}
+            className="relative mx-auto flex w-fit rounded-full border-2 border-black bg-white p-1"
+        >
+            <Tab setPosition={setPosition}>Home</Tab>
+            <Tab setPosition={setPosition}>Pricing</Tab>
+            <Tab setPosition={setPosition}>Features</Tab>
+            <Tab setPosition={setPosition}>Docs</Tab>
+            <Tab setPosition={setPosition}>Blog</Tab>
+
+            <Cursor position={position} />
+        </ul>
+    );
+};
+
+const Tab = ({ children, setPosition }) => {
+    const ref = useRef<HTMLLIElement>(null);
+
+    return (
+        <li
+            ref={ref}
+            onMouseEnter={() => {
+                if (!ref?.current) return;
+
+                const { width } = ref.current.getBoundingClientRect();
+
+                setPosition({
+                    left: ref.current.offsetLeft,
+                    width,
+                    opacity: 1,
+                });
+            }}
+            className="relative z-10 block cursor-pointer px-3 py-1.5 text-xs uppercase text-white mix-blend-difference md:px-5 md:py-3 md:text-base"
+        >
+            {children}
+        </li>
+    );
+};
+
+const Cursor = ({ position }) => {
+    return (
+        <motion.li
+            animate={{
+                ...position,
+            }}
+            className="absolute z-0 h-7 rounded-full bg-black md:h-12"
+        />
+    );
+};
 
 export default App
