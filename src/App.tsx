@@ -1,14 +1,10 @@
 import {useState} from 'react'
 import './App.css'
-import {
-    ArrowLeftStartOnRectangleIcon,
-    BookmarkIcon,
-    Cog6ToothIcon,
-    HomeIcon,
-    StopCircleIcon
+import {ArrowLeftStartOnRectangleIcon, BookmarkIcon, Cog6ToothIcon, HomeIcon
 } from "@heroicons/react/24/outline";
 import {Tab} from "./components/Tab.tsx";
 import {Cursor} from "./components/Cursor.tsx";
+import {CompassIcon} from "@sidekickicons/react/24/outline";
 
 function App() {
 
@@ -29,7 +25,7 @@ function App() {
                        }));
                    }}>
                   <Tab setPosition={setPosition}><HomeIcon className='h-8 w-8'/></Tab>
-                  <Tab setPosition={setPosition}><StopCircleIcon className='h-8 w-8 rotate-[20deg]' color='white'/></Tab>
+                  <Tab setPosition={setPosition}><CompassIcon className='h-8 w-8'/></Tab>
                   <Tab setPosition={setPosition}><BookmarkIcon className='h-8 w-8' color='white'/></Tab>
                   <Tab setPosition={setPosition}><Cog6ToothIcon className='h-8 w-8' color='white'/></Tab>
                   <Tab setPosition={setPosition}><ArrowLeftStartOnRectangleIcon className='h-8 w-8' color='white'/></Tab>
