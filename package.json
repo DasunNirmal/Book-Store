@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "@sidekickicons/react": "^0.12.0",
     "@tailwindcss/vite": "^4.0.9",
     "framer-motion": "^12.4.10",
     "react": "^19.0.0",
