@@ -12,7 +12,7 @@ export const Cursor = ({ position }: { position: Position }) => {
             animate={{
                 ...position,
             }}
-            className="absolute left-0 right-0 m-auto w-[58px] h-[58px] rounded-full bg-black"
+            className="absolute left-0 right-0 m-auto w-[58px] h-[58px] rounded-full bg-slate-700"
         />
     );
 }
