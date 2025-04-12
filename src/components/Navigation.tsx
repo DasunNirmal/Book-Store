@@ -86,16 +86,25 @@ export const Navigation = () => {
                         <Cursor position={position}/>
                     </div>
                 </div>
-                <motion.div  onClick={() => setOpen(!open)} animate={{right: open ? "10px" : "18px"}} className='z-10 rounded-full border-2 border-slate-700 w-[48px] h-[48px] absolute bottom-0 mb-8'>
+                <motion.div onClick={() => setOpen(!open)} 
+                    animate={{right: open ? "10px" : "18px"}} 
+                    transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
+                    className='z-10 rounded-full border-2 border-slate-700 w-[48px] h-[48px] absolute bottom-0 mb-8'>
                     <div className='absolute w-fit h-fit m-auto top-1 left-0 bottom-0 right-0'>
                         <input type='checkbox' className='appearance-none hidden invisible'/>
                         <div className='relative cursor-pointer w-[18px] h-[18px]'>
-                            <motion.span animate={{rotate: open ? -45 : 0, y: open ? 1.5 : 0, width: open ? "58%" : "13px"}}
-                                         className='block relative w-[13px] h-[2px] bg-slate-700 mb-1 rounded-lg transition duration-[2ms]'/>
-                            <motion.span animate={{width: open ? "140%" : "18px"}}
-                                         className='block relative w-[18px] h-[2px] bg-slate-700 mb-1 rounded-lg transition duration-[5s]'/>
-                            <motion.span animate={{ rotate: open ? 45 : 0, y: open ? -1.5 : 0, width: open ? "58%" : "13px"}}
-                                         className='block relative w-[13px] h-[2px] bg-slate-700 mb-1 rounded-lg transition duration-[2ms]'/>
+                            <motion.span 
+                                animate={{rotate: open ? -45 : 0, y: open ? 1.5 : 0, width: open ? "58%" : "13px"}}
+                                transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
+                                className='block relative w-[13px] h-[2px] bg-slate-700 mb-1 rounded-lg'/>
+                            <motion.span 
+                                animate={{width: open ? "140%" : "18px"}}
+                                transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
+                                className='block relative w-[18px] h-[2px] bg-slate-700 mb-1 rounded-lg'/>
+                            <motion.span 
+                                animate={{ rotate: open ? 45 : 0, y: open ? -1.5 : 0, width: open ? "58%" : "13px"}}
+                                transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
+                                className='block relative w-[13px] h-[2px] bg-slate-700 mb-1 rounded-lg'/>
                         </div>
                     </div>
                 </motion.div>
