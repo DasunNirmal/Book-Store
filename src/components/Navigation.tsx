@@ -32,10 +32,12 @@ export const Navigation = () => {
 
     return (
         <div>
+            {/*Main Container*/}
             <motion.div animate={{width: open ? "240px" : "80px"}} 
                         transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
                         className='flex flex-col w-[80px] h-[928px] top-0 left-0 fixed after:absolute after:right-0 after:top-0 after:bottom-0 after:m-auto after:h-9/10 after:w-[1px] after:bg-slate-700/50 justify-center items-center gap-15'>
                 <div className='absolute left-0 w-[80px] h-fit'>
+                    {/*Navigation*/}
                     <div className='flex flex-col w-[80px] h-fit top-0 left-0 relative justify-center items-center gap-15 bg-stone-50'
                          onMouseLeave={() => {
                              setPosition((pv) => ({
@@ -86,6 +88,7 @@ export const Navigation = () => {
                         <Cursor position={position}/>
                     </div>
                 </div>
+                {/*Menu Button*/}
                 <motion.div onClick={() => setOpen(!open)} 
                     animate={{right: open ? "10px" : "18px"}} 
                     transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
