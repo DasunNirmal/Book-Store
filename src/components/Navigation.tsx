@@ -8,11 +8,7 @@ import {Link, useLocation} from "react-router";
 
 export const Navigation = () => {
 
-    const [position, setPosition] = useState({
-        top: 0,
-        height: 0,
-        opacity: 0,
-    });
+    const [position, setPosition] = useState({top: 0, height: 0, opacity: 0,});
 
     const [open, setOpen] = useState(false);
     // const navigate = useNavigate();
