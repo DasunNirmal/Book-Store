@@ -3,15 +3,14 @@ import {ArrowLeftStartOnRectangleIcon, BookmarkIcon, Cog6ToothIcon, HomeIcon} fr
 import {CompassIcon} from "@sidekickicons/react/24/outline";
 import {Cursor} from "./Cursor.tsx";
 import {motion} from "framer-motion";
-import {useState} from "react";
+import {Dispatch, SetStateAction, useState} from "react";
 import {Link, useLocation} from "react-router";
 import {SidebarContext} from "./SIdebarContext.tsx";
 
-export const Navigation = ({ open, setOpen }: { open: boolean, setOpen: any }) => {
+export const Navigation = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) => {
 
     const [position, setPosition] = useState({top: 0, height: 0, opacity: 0,});
 
-    // const [open, setOpen] = useState(false);
     // const navigate = useNavigate();
     const {pathname} = useLocation();
     let subpage = pathname.split("/")?.[1];
