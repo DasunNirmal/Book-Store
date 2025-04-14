@@ -5,12 +5,13 @@ import {Cursor} from "./Cursor.tsx";
 import {motion} from "framer-motion";
 import {useState} from "react";
 import {Link, useLocation} from "react-router";
+import {SidebarContext} from "./SIdebarContext.tsx";
 
-export const Navigation = () => {
+export const Navigation = ({ open, setOpen }: { open: boolean, setOpen: any }) => {
 
     const [position, setPosition] = useState({top: 0, height: 0, opacity: 0,});
 
-    const [open, setOpen] = useState(false);
+    // const [open, setOpen] = useState(false);
     // const navigate = useNavigate();
     const {pathname} = useLocation();
     let subpage = pathname.split("/")?.[1];
@@ -27,11 +28,11 @@ export const Navigation = () => {
     }
 
     return (
-        <div>
+        <SidebarContext.Provider value={{open}}>
             {/*Main Container*/}
             <motion.div animate={{width: open ? "240px" : "80px"}} 
                         transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
-                        className='flex flex-col w-[80px] h-[928px] top-0 left-0 fixed after:absolute after:right-0 after:top-0 after:bottom-0 after:m-auto after:h-9/10 after:w-[1px] after:bg-slate-700/50 justify-center items-center gap-15'>
+                        className='flex flex-col w-[80px] h-[928px] z-[2] top-0 left-0 fixed after:absolute after:right-0 after:top-0 after:bottom-0 after:m-auto after:h-9/10 after:w-[1px] after:bg-slate-700/50 justify-center items-center gap-15'>
                 <div className='absolute left-0 w-[80px] h-fit'>
                     {/*Navigation*/}
                     <div className='flex flex-col w-[80px] h-fit top-0 left-0 relative justify-center items-center gap-15 bg-stone-50'
@@ -43,7 +44,7 @@ export const Navigation = () => {
                          }}>
                         <Link className={`${activePage('home')}`} to='/home'>
                             <Tab setPosition={setPosition}><HomeIcon className='h-8 w-8'/></Tab>
-                            <motion.span 
+                            <motion.span
                                 initial={{ x: -20, opacity: 0 }}
                                 animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
                                 transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.4}}
@@ -88,10 +89,10 @@ export const Navigation = () => {
                 <motion.div onClick={() => setOpen(!open)} 
                     animate={{right: open ? "10px" : "18px"}} 
                     transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
-                    className='z-10 rounded-full border-2 border-slate-700 w-[48px] h-[48px] absolute bottom-0 mb-8'>
+                    className='z-10 rounded-full border-2 border-slate-700 w-[48px] h-[48px] absolute bottom-0 mb-8 cursor-pointer'>
                     <div className='absolute w-fit h-fit m-auto top-1 left-0 bottom-0 right-0'>
                         <input type='checkbox' className='appearance-none hidden invisible'/>
-                        <div className='relative cursor-pointer w-[18px] h-[18px]'>
+                        <div className='relative w-[18px] h-[18px]'>
                             <motion.span 
                                 animate={{rotate: open ? -45 : 0, y: open ? 1.5 : 0, width: open ? "58%" : "13px"}}
                                 transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
@@ -108,6 +109,6 @@ export const Navigation = () => {
                     </div>
                 </motion.div>
             </motion.div>
-        </div>
+        </SidebarContext.Provider>
     )
 }
