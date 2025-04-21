@@ -15,7 +15,13 @@ export const Home = () => {
                 className='h-[900px] absolute top-0 right-0 p-8 border-2 border-amber-600'>
                 <h1>Home</h1>
                 <div className="bg-[url('assets/1.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px]"></div>
-                {/*<div className="bg-[url('assets/2.png')] bg-no-repeat bg-center bg-cover h-[250px] w-[1000px]"></div>*/}
+                <div className="bg-[url('assets/2.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px]"></div>
+                <div className="bg-[url('assets/3.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px]"></div>
+                <div className="bg-[url('assets/4.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px]"></div>
+                <div className="bg-[url('assets/5.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px]"></div>
+                <div className="bg-[url('assets/6.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px]"></div>
+                <div className="bg-[url('assets/7.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px]"></div>
+                <div className="bg-[url('assets/8.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px]"></div>
 
             </motion.div>
             {/*<motion.div
