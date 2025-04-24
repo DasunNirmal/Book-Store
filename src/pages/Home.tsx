@@ -12,16 +12,33 @@ export const Home = () => {
                 initial={{ width: `calc(100% - ${sidebarWidth}px)` }}
                 animate={{ width: `calc(100% - ${sidebarWidth}px)` }}
                 transition={{ type: "spring", stiffness: 100, delay: open ? 0 : 0.5 }}
-                className='h-[900px] absolute top-0 right-0 p-8 border-2 border-amber-600'>
-                <h1>Home</h1>
-                <div className="bg-[url('assets/1.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px]"></div>
-                <div className="bg-[url('assets/2.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px]"></div>
-                <div className="bg-[url('assets/3.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px]"></div>
-                <div className="bg-[url('assets/4.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px]"></div>
-                <div className="bg-[url('assets/5.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px]"></div>
-                <div className="bg-[url('assets/6.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px]"></div>
-                <div className="bg-[url('assets/7.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px]"></div>
-                <div className="bg-[url('assets/8.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px]"></div>
+                className='h-[900px] absolute top-0 right-0 p-8'>
+
+                <div className="relative flex items-center justify-center h-full w-full">
+                  {/* 4 blobs around the h1 tag */}
+                  <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-44 h-44 rounded-full bg-[#a5b4fc] opacity-60 blur-2xl animate-blob1 z-0 pointer-events-none"></div>
+                  <div className="absolute bottom-0 left-1/3 w-40 h-40 rounded-full bg-[#fbc2eb] opacity-60 blur-2xl animate-blob2 z-0 pointer-events-none"></div>
+                  <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-36 h-36 rounded-full bg-[#fcb69f] opacity-50 blur-2xl animate-blob3 z-0 pointer-events-none"></div>
+                  <div className="absolute top-1/3 left-0 w-36 h-36 rounded-full bg-[#fdffb6] opacity-40 blur-2xl animate-blob5 z-0 pointer-events-none"></div>
+                  <div className="relative flex items-center justify-center mt-[-150px]">
+
+                      {/* Two blobs directly behind h1 */}
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[320px] rounded-full bg-[#fbc2eb] opacity-60 blur-3xl z-0 pointer-events-none animate-behindBlob1"></div>
+                    <div className="absolute left-1/3 top-[55%] -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] rounded-full bg-[#a5b4fc] opacity-40 blur-2xl z-0 pointer-events-none animate-behindBlob2"></div>
+                    <h1 className="relative z-10 text-5xl font-bold text-[#3a3a3a] text-center drop-shadow-lg px-8 py-4">
+                      Unleash Your Imagination<br/>
+                      <span className="block mt-2">With Our Books</span>
+                    </h1>
+                  </div>
+                </div>
+
+                <div className="bg-[url('assets/2.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px] absolute top-0"></div>
+                <div className="bg-[url('assets/1.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px] absolute bottom-0"></div>
+                <div className="bg-[url('assets/3.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px] absolute top-0 right-0"></div>
+                <div className="bg-[url('assets/4.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px] absolute bottom-0 right-0"></div>
+                <div className="bg-[url('assets/6.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px] absolute bottom-0 left-[370px]"></div>
+                <div className="bg-[url('assets/7.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px] absolute bottom-0 right-[750px]"></div>
+                <div className="bg-[url('assets/8.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px] absolute bottom-0 right-[285px]"></div>
 
             </motion.div>
             {/*<motion.div
