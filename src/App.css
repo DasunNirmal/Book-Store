@@ -1,0 +1,69 @@
+@keyframes blob1 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  20% { transform: translate(-80px, -60px) scale(1.15); }
+  40% { transform: translate(100px, 70px) scale(0.95); }
+  60% { transform: translate(-120px, 100px) scale(1.1); }
+  80% { transform: translate(60px, -90px) scale(1.05); }
+}
+@keyframes blob2 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  15% { transform: translate(120px, 120px) scale(1.15); }
+  35% { transform: translate(-100px, -100px) scale(1.1); }
+  55% { transform: translate(80px, -120px) scale(0.92); }
+  75% { transform: translate(-90px, 80px) scale(1.12); }
+}
+@keyframes blob3 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  25% { transform: translate(80px, -120px) scale(1.12); }
+  50% { transform: translate(-120px, 100px) scale(1.05); }
+  75% { transform: translate(100px, 80px) scale(0.98); }
+}
+@keyframes blob4 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  25% { transform: translate(70px, -100px) scale(1.08); }
+  50% { transform: translate(-90px, 60px) scale(1.12); }
+  75% { transform: translate(40px, 100px) scale(0.95); }
+}
+@keyframes blob5 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  20% { transform: translate(120px, 60px) scale(1.13); }
+  45% { transform: translate(220px, -40px) scale(1.09); }
+  70% { transform: translate(160px, -100px) scale(0.97); }
+}
+
+@keyframes behindBlob1 {
+  0%, 100% { border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%; }
+  25% { border-radius: 60% 40% 70% 30% / 40% 60% 30% 70%; }
+  50% { border-radius: 40% 60% 30% 70% / 70% 30% 60% 40%; }
+  75% { border-radius: 70% 30% 60% 40% / 30% 70% 40% 60%; }
+}
+@keyframes behindBlob2 {
+  0%, 100% { border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%; }
+  20% { border-radius: 65% 35% 55% 45% / 45% 55% 35% 65%; }
+  40% { border-radius: 35% 65% 45% 55% / 55% 45% 65% 35%; }
+  60% { border-radius: 55% 45% 65% 35% / 35% 65% 45% 55%; }
+  80% { border-radius: 45% 55% 35% 65% / 65% 35% 55% 45%; }
+}
+
+.animate-blob1 {
+  animation: blob1 12s ease-in-out infinite;
+}
+.animate-blob2 {
+  animation: blob2 15s ease-in-out infinite;
+}
+.animate-blob3 {
+  animation: blob3 18s ease-in-out infinite;
+}
+.animate-blob4 {
+  animation: blob4 17s ease-in-out infinite;
+}
+.animate-blob5 {
+  animation: blob5 22s ease-in-out infinite;
+}
+
+.animate-behindBlob1 {
+  animation: behindBlob1 14s ease-in-out infinite alternate;
+}
+.animate-behindBlob2 {
+  animation: behindBlob2 18s ease-in-out infinite alternate;
+}
