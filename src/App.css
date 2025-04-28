@@ -67,3 +67,27 @@
 .animate-behindBlob2 {
   animation: behindBlob2 18s ease-in-out infinite alternate;
 }
+
+.feature-card {
+  border: 3px dotted #eab308; /* amber-600 */
+  border-radius: 18px;
+  padding: 24px 32px;
+  background: #F4F5F6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 280px;
+  height: 145px;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.04);
+  transition: box-shadow 0.2s;
+}
+.feature-card:hover {
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.10);
+}
+.feature-title {
+  margin-top: 16px;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #3a3a3a;
+  text-align: center;
+}

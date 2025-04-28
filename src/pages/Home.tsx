@@ -1,5 +1,6 @@
 import {motion} from "framer-motion";
 import {useSidebar} from "../components/SIdebarContext.tsx";
+import {ArrowPathRoundedSquareIcon, CheckBadgeIcon, ShieldCheckIcon, TruckIcon} from "@heroicons/react/24/outline";
 
 export const Home = () => {
 
@@ -41,13 +42,42 @@ export const Home = () => {
                 <div className="bg-[url('assets/8.png')] bg-no-repeat bg-center bg-cover h-[275px] w-[278px] absolute bottom-0 right-[285px]"></div>
 
             </motion.div>
-            {/*<motion.div
+
+            {/*second section*/}
+            <motion.div
                 initial={{ width: `calc(100% - ${sidebarWidth}px)` }}
                 animate={{ width: `calc(100% - ${sidebarWidth}px)` }}
                 transition={{ type: "spring", stiffness: 100, delay: open ? 0 : 0.5 }}
-                className='h-[900px] absolute top-[928px] right-0 p-8 border-2 border-amber-600'>
-                <h1>Second Home</h1>
-            </motion.div>*/}
+                className='h-[200px] absolute top-[928px] right-0 p-8 flex gap-16 justify-center items-center bg-[#fff]'>
+                <div className="feature-card">
+                    <TruckIcon className="size-[80px] text-rose-500 mx-auto" />
+                    <div className="feature-title">Fast Delivery</div>
+                </div>
+                <div className="feature-card">
+                    <ShieldCheckIcon className="size-[80px] text-rose-500 mx-auto" />
+                    <div className="feature-title">Secure Payment</div>
+                </div>
+                <div className="feature-card">
+                    <CheckBadgeIcon className="size-[80px] text-rose-500 mx-auto" />
+                    <div className="feature-title">Best Quality</div>
+                </div>
+                <div className="feature-card">
+                    <ArrowPathRoundedSquareIcon className="size-[80px] text-rose-500 mx-auto" />
+                    <div className="feature-title">Return Guaranty</div>
+                </div>
+            </motion.div>
+
+            {/* About Us section */}
+            <motion.div
+                initial={{ width: `calc(100% - ${sidebarWidth}px)` }}
+                animate={{ width: `calc(100% - ${sidebarWidth}px)` }}
+                transition={{ type: "spring", stiffness: 100, delay: open ? 0 : 0.5 }}
+                className='h-[200px] absolute top-[1128px] right-0 p-8 flex gap-16 justify-center items-center border-2 border-amber-600'>
+                <h2 className="text-3xl font-bold mb-4 text-[#3a3a3a]">About Us</h2>
+                <p className="max-w-2xl text-lg text-[#555] text-center">
+                    Welcome to our Online Book Store! We are passionate about connecting readers with their next great adventure. Our curated selection offers something for everyone, from timeless classics to the latest bestsellers. Enjoy fast delivery, secure payment, and a seamless shopping experience. Thank you for choosing us as your trusted book destination!
+                </p>
+            </motion.div>
         </>
     );
 }
