@@ -1,6 +1,7 @@
 import {motion} from "framer-motion";
 import {useSidebar} from "../components/SIdebarContext.tsx";
 import {ArrowPathRoundedSquareIcon, CheckBadgeIcon, ShieldCheckIcon, TruckIcon} from "@heroicons/react/24/outline";
+import {ArrowRightIcon} from "@heroicons/react/24/solid";
 
 export const Home = () => {
 
@@ -21,8 +22,7 @@ export const Home = () => {
                   <div className="absolute bottom-0 left-1/3 w-40 h-40 rounded-full bg-[#fbc2eb] opacity-60 blur-2xl animate-blob2 z-0 pointer-events-none"></div>
                   <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-36 h-36 rounded-full bg-[#fcb69f] opacity-50 blur-2xl animate-blob3 z-0 pointer-events-none"></div>
                   <div className="absolute top-1/3 left-0 w-36 h-36 rounded-full bg-[#fdffb6] opacity-40 blur-2xl animate-blob5 z-0 pointer-events-none"></div>
-                  <div className="relative flex items-center justify-center mt-[-150px]">
-
+                  <div className="relative flex flex-col items-center w-full mt-[-150px]">
                       {/* Two blobs directly behind h1 */}
                     <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[320px] rounded-full bg-[#fbc2eb] opacity-60 blur-3xl z-0 pointer-events-none animate-behindBlob1"></div>
                     <div className="absolute left-1/3 top-[55%] -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] rounded-full bg-[#a5b4fc] opacity-40 blur-2xl z-0 pointer-events-none animate-behindBlob2"></div>
@@ -30,6 +30,15 @@ export const Home = () => {
                       Unleash Your Imagination<br/>
                       <span className="block mt-2">With Our Books</span>
                     </h1>
+                  </div>
+                  {/* Absolutely centered button at the bottom of the container */}
+                  <div className="absolute left-1/2 bottom-90 transform -translate-x-1/2 z-20 transition-all duration-300 rounded-full hover:rounded-xl active:rounded-2xl">
+                    <button className="w-[200px] rounded-3xl border-2 border-dashed border-black bg-rose-500 px-6 py-3
+                    font-semibold text-[#F4F5F6] cursor-pointer transition-all duration-300 hover:translate-x-[-4px]
+                    hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_black] active:translate-x-[0px]
+                    active:translate-y-[0px] active:rounded-2xl active:shadow-none">
+                      Shop Now <ArrowRightIcon className="w-6 h-6 inline ml-4" />
+                    </button>
                   </div>
                 </div>
 
