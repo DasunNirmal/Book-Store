@@ -81,11 +81,22 @@ export const Home = () => {
                 initial={{ width: `calc(100% - ${sidebarWidth}px)` }}
                 animate={{ width: `calc(100% - ${sidebarWidth}px)` }}
                 transition={{ type: "spring", stiffness: 100, delay: open ? 0 : 0.5 }}
-                className='h-[200px] absolute top-[1128px] right-0 p-8 flex gap-16 justify-center items-center border-2 border-amber-600'>
-                <h2 className="text-3xl font-bold mb-4 text-[#3a3a3a]">About Us</h2>
-                <p className="max-w-2xl text-lg text-[#555] text-center">
+                className='h-[500px] absolute top-[1128px] right-0 p-8 flex flex-col gap-10 justify-start items-start'>
+                <h2 className="text-3xl font-bold mb-4 text-[#3a3a3a] self-center">About Us</h2>
+                <p className="max-w-2xl text-lg text-[#555] text-center mt-20">
                     Welcome to our Online Book Store! We are passionate about connecting readers with their next great adventure. Our curated selection offers something for everyone, from timeless classics to the latest bestsellers. Enjoy fast delivery, secure payment, and a seamless shopping experience. Thank you for choosing us as your trusted book destination!
                 </p>
+                <div className="bg-[url('assets/Bookshop-bro.png')] bg-no-repeat bg-center bg-cover h-[475px] w-[478px] absolute bottom-0 right-[100px]"></div>
+            </motion.div>
+
+            <motion.div
+                initial={{ width: `calc(100% - ${sidebarWidth}px)` }}
+                animate={{ width: `calc(100% - ${sidebarWidth}px)` }}
+                transition={{ type: "spring", stiffness: 100, delay: open ? 0 : 0.5 }}
+                className='h-[500px] absolute top-[1628px] right-0 p-8 flex justify-center items-center'>
+                <motion.div className='newArrival self-baseline flex justify-center items-center'>
+                    <h2 className="text-3xl font-bold mt-4 text-[#3a3a3a] self-start">New Arrivals</h2>
+                </motion.div>
             </motion.div>
         </>
     );
