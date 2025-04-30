@@ -91,3 +91,16 @@
   color: #3a3a3a;
   text-align: center;
 }
+
+.newArrival {
+  height: 450px;
+  width: 70%;
+  border: 3px dotted #eab308;
+  border-radius: 18px;
+  background: #efeff3;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.04);
+  transition: box-shadow 0.2s;
+}
+.newArrival:hover {
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.10);
+}
