@@ -1,6 +1,12 @@
 import {motion} from "framer-motion";
 import {useSidebar} from "../components/SIdebarContext.tsx";
-import {ArrowPathRoundedSquareIcon, CheckBadgeIcon, ShieldCheckIcon, TruckIcon} from "@heroicons/react/24/outline";
+import {
+    ArrowPathRoundedSquareIcon,
+    BookmarkIcon,
+    CheckBadgeIcon,
+    ShieldCheckIcon,
+    TruckIcon
+} from "@heroicons/react/24/outline";
 import {ArrowRightIcon} from "@heroicons/react/24/solid";
 
 export const Home = () => {
@@ -109,12 +115,93 @@ export const Home = () => {
 
             {/*New Arrivals section*/}
             <motion.div
-                initial={{width: `calc(100% - ${sidebarWidth}px)`}}
-                animate={{width: `calc(100% - ${sidebarWidth}px)`}}
-                transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
-                className='h-[500px] absolute top-[1628px] right-0 p-8 flex justify-center items-center'>
-                <motion.div className='newArrival self-baseline flex justify-center items-center'>
-                    <h2 className="text-3xl font-bold mt-4 text-[#3a3a3a] self-start">New Arrivals</h2>
+                initial={{ width: `calc(100% - ${sidebarWidth}px)` }}
+                animate={{ width: `calc(100% - ${sidebarWidth}px)` }}
+                transition={{ type: "spring", stiffness: 100, delay: open ? 0 : 0.5 }}
+                className='h-[550px] absolute top-[1628px] right-0 p-8 flex justify-center items-center'>
+
+                <motion.div className='newArrival self-baseline grid grid-cols-4 justify-items-center content-center justify-center'>
+                <h2 className="text-3xl absolute top-[15px] font-bold mt-9 text-[#3a3a3a]">New Arrivals</h2>
+
+                    {/* Book 1 */}
+                    <div className="relative w-[230px] h-[350px] mx-4 bg-white rounded-lg shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                        <div className="h-[220px] bg-[url('https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80')] bg-cover bg-center transition-transform duration-500 group-hover:scale-105"></div>
+                        <div className="p-3">
+                            <h3 className="font-semibold text-[#3a3a3a] truncate">The Silent Patient</h3>
+                            <p className="text-sm text-stone-600">Alex Michaelides</p>
+                            <span className="font-bold text-rose-500">$12.99</span>
+                            <div className="flex justify-between items-center mt-2">
+                                <div className="flex space-x-2">
+                                    <button className="px-10 py-2 cursor-pointer rounded-full bg-slate-700 text-white text-sm hover:bg-slate-800 transition-all duration-300 hover:font-medium transform hover:scale-[1.02]">
+                                        Add to Cart
+                                    </button>
+                                    <button className="p-2 cursor-pointer rounded-full bg-rose-500 text-white hover:bg-rose-700 transition-all duration-300 transform hover:scale-110">
+                                        <BookmarkIcon className="w-5 h-5" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Book 2 */}
+                    <div className="relative w-[230px] h-[350px] mx-4 bg-white rounded-lg shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                        <div className="h-[220px] bg-[url('https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80')] bg-cover bg-center transition-transform duration-500 group-hover:scale-105"></div>
+                        <div className="p-3">
+                            <h3 className="font-semibold text-[#3a3a3a] truncate">Educated</h3>
+                            <p className="text-sm text-stone-600">Tara Westover</p>
+                            <span className="font-bold text-rose-500">$14.99</span>
+                            <div className="flex justify-between items-center mt-2">
+                                <div className="flex space-x-2">
+                                    <button className="px-10 py-2 cursor-pointer rounded-full bg-slate-700 text-white text-sm transition-all duration-300 hover:font-medium transform hover:scale-[1.02]">
+                                        Add to Cart
+                                    </button>
+                                    <button className="p-2 rounded-full cursor-pointer bg-rose-500 text-white hover:bg-rose-700 transition-all duration-300 transform hover:scale-110">
+                                        <BookmarkIcon className="w-5 h-5" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Book 3 */}
+                    <div className="relative w-[230px] h-[350px] mx-4 bg-white rounded-lg shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                        <div className="h-[220px] bg-[url('https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80')] bg-cover bg-center transition-transform duration-500 group-hover:scale-105"></div>
+                        <div className="p-3">
+                            <h3 className="font-semibold text-[#3a3a3a] truncate">The Midnight Library</h3>
+                            <p className="text-sm text-stone-600">Matt Haig</p>
+                            <span className="font-bold text-rose-500">$10.99</span>
+                            <div className="flex justify-between items-center mt-2">
+                                <div className="flex space-x-2">
+                                    <button className="px-10 py-2 cursor-pointer rounded-full bg-slate-700 text-white text-sm transition-all duration-300 hover:font-medium transform hover:scale-[1.02]">
+                                        Add to Cart
+                                    </button>
+                                    <button className="p-2 cursor-pointer rounded-full bg-rose-500 text-white hover:bg-rose-700 transition-all duration-300 transform hover:scale-110">
+                                        <BookmarkIcon className="w-5 h-5" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Book 4 */}
+                    <div className="relative w-[230px] h-[350px] mx-4 bg-white rounded-lg shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                        <div className="h-[220px] bg-[url('https://images.unsplash.com/photo-1531346878377-a5be20888e57?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80')] bg-cover bg-center transition-transform duration-500 group-hover:scale-105"></div>
+                        <div className="p-3">
+                            <h3 className="font-semibold text-[#3a3a3a] truncate">Atomic Habits</h3>
+                            <p className="text-sm text-stone-600">James Clear</p>
+                            <span className="font-bold text-rose-500">$11.49</span>
+                            <div className="flex justify-between items-center mt-2">
+                                <div className="flex space-x-2">
+                                    <button className="px-10 py-2 cursor-pointer rounded-full bg-slate-700 text-white text-sm transition-all duration-300 hover:font-medium transform hover:scale-[1.02]">
+                                        Add to Cart
+                                    </button>
+                                    <button className="p-2 cursor-pointer rounded-full bg-rose-500 text-white hover:bg-rose-700 transition-all duration-300 transform hover:scale-110">
+                                        <BookmarkIcon className="w-5 h-5" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </motion.div>
             </motion.div>
 
@@ -123,7 +210,7 @@ export const Home = () => {
                 initial={{width: `calc(100% - ${sidebarWidth}px)`}}
                 animate={{width: `calc(100% - ${sidebarWidth}px)`}}
                 transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
-                className='h-[400px] absolute top-[2128px] right-0 p-8 bg-gradient-to-r from-stone-50 to-stone-300 text-[#3a3a3a] flex flex-col'>
+                className='h-[400px] absolute top-[2178px] right-0 p-8 bg-gradient-to-r from-stone-50 to-stone-300 text-[#3a3a3a] flex flex-col'>
 
                 <div className="flex flex-1 gap-16">
                     {/* Company Info */}
