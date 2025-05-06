@@ -103,7 +103,7 @@ export const Home = () => {
                 transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
                 className='h-[500px] absolute top-[1128px] right-0 p-8 flex flex-col gap-10 justify-start items-start'>
                 <h2 className="text-3xl font-bold mb-4 text-[#3a3a3a] self-center">About Us</h2>
-                <p className="max-w-2xl text-lg text-[#555] text-center mt-20">
+                <p className="max-w-2xl text-lg text-[#555] text-center mt-12 text-[24px]">
                     Welcome to our Online Book Store! We are passionate about connecting readers with their next great
                     adventure. Our curated selection offers something for everyone, from timeless classics to the latest
                     bestsellers. Enjoy fast delivery, secure payment, and a seamless shopping experience. Thank you for
@@ -152,7 +152,7 @@ export const Home = () => {
                             <span className="font-bold text-rose-500">$14.99</span>
                             <div className="flex justify-between items-center mt-2">
                                 <div className="flex space-x-2">
-                                    <button className="px-10 py-2 cursor-pointer rounded-full bg-slate-700 text-white text-sm transition-all duration-300 hover:font-medium transform hover:scale-[1.02]">
+                                    <button className="px-10 py-2 cursor-pointer rounded-full bg-slate-700 hover:bg-slate-800 text-white text-sm transition-all duration-300 hover:font-medium transform hover:scale-[1.02]">
                                         Add to Cart
                                     </button>
                                     <button className="p-2 rounded-full cursor-pointer bg-rose-500 text-white hover:bg-rose-700 transition-all duration-300 transform hover:scale-110">
@@ -172,7 +172,7 @@ export const Home = () => {
                             <span className="font-bold text-rose-500">$10.99</span>
                             <div className="flex justify-between items-center mt-2">
                                 <div className="flex space-x-2">
-                                    <button className="px-10 py-2 cursor-pointer rounded-full bg-slate-700 text-white text-sm transition-all duration-300 hover:font-medium transform hover:scale-[1.02]">
+                                    <button className="px-10 py-2 cursor-pointer rounded-full bg-slate-700 hover:bg-slate-800 text-white text-sm transition-all duration-300 hover:font-medium transform hover:scale-[1.02]">
                                         Add to Cart
                                     </button>
                                     <button className="p-2 cursor-pointer rounded-full bg-rose-500 text-white hover:bg-rose-700 transition-all duration-300 transform hover:scale-110">
@@ -192,7 +192,7 @@ export const Home = () => {
                             <span className="font-bold text-rose-500">$11.49</span>
                             <div className="flex justify-between items-center mt-2">
                                 <div className="flex space-x-2">
-                                    <button className="px-10 py-2 cursor-pointer rounded-full bg-slate-700 text-white text-sm transition-all duration-300 hover:font-medium transform hover:scale-[1.02]">
+                                    <button className="px-10 py-2 cursor-pointer rounded-full bg-slate-700 hover:bg-slate-800 text-white text-sm transition-all duration-300 hover:font-medium transform hover:scale-[1.02]">
                                         Add to Cart
                                     </button>
                                     <button className="p-2 cursor-pointer rounded-full bg-rose-500 text-white hover:bg-rose-700 transition-all duration-300 transform hover:scale-110">
