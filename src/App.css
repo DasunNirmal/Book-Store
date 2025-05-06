@@ -1,3 +1,8 @@
+body {
+  font-family: "Tagesschrift", system-ui;
+  font-weight: 500;
+  font-style: normal;
+}
 @keyframes blob1 {
   0%, 100% { transform: translate(0px, 0px) scale(1); }
   20% { transform: translate(-80px, -60px) scale(1.15); }
