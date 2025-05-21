@@ -1,13 +1,35 @@
 import {motion} from "framer-motion";
 import {useSidebar} from "../components/SIdebarContext.tsx";
-import {MagnifyingGlassIcon} from "@heroicons/react/24/outline";
+import {CheckIcon, MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import {useState} from "react";
 
 export const Discover = () => {
 
     const [isInputFocused, setIsInputFocused] = useState(false);
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const { open } = useSidebar();
     const sidebarWidth = open ? 240 : 80;
+
+    const bookCategories = [
+        "Fiction",
+        "Mystery",
+        "Science Fiction",
+        "Fantasy",
+        "Romance",
+        "Biography",
+        "History",
+        "Self-Help",
+        "Business",
+        "Technology"
+    ];
+
+    const toggleCategory = (category: string) => {
+        setSelectedCategories(prev =>
+            prev.includes(category)
+                ? prev.filter(c => c !== category)
+                : [...prev, category]
+        );
+    };
 
     return (
         <>
@@ -42,6 +64,33 @@ export const Discover = () => {
                             Search
                         </motion.button>
 
+                    </div>
+                </div>
+
+                {/*categories*/}
+                <div className="p-8">
+                    <h2 className="text-2xl font-semibold text-slate-700 mb-6">Browse Categories</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                        {bookCategories.map((category) => (
+                            <motion.div
+                                key={category}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="flex items-center space-x-3 cursor-pointer"
+                                onClick={() => toggleCategory(category)}
+                            >
+                                <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors 
+                                    ${selectedCategories.includes(category)
+                                    ? 'bg-rose-500 border-rose-500'
+                                    : 'border-slate-700'}`}
+                                >
+                                    {selectedCategories.includes(category) && (
+                                        <CheckIcon className="w-4 h-4 text-white" />
+                                    )}
+                                </div>
+                                <span className="text-slate-700">{category}</span>
+                            </motion.div>
+                        ))}
                     </div>
                 </div>
             </motion.div>
