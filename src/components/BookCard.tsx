@@ -22,11 +22,14 @@ export const BookCard = ({ title, author, price, image } : BookCardProps) => {
                     <div className="flex space-x-3">
                         {/* Add to Cart Button */}
                         <motion.button
-                            className="px-6 py-2 cursor-pointer rounded-full bg-slate-700 text-white text-sm"
+                            className="px-6 py-2 cursor-pointer rounded-full text-white text-sm"
+                            style={{
+                                backgroundColor: "#334155"
+                            }}
                             whileHover={{
                                 backgroundColor: "#1e293b",
                                 scale: 1.02,
-                                fontWeight: "medium"
+                                fontWeight: 500
                             }}
                             whileTap={{
                                 scale: 0.95,
@@ -62,7 +65,10 @@ export const BookCard = ({ title, author, price, image } : BookCardProps) => {
 
                         {/* Bookmark Button */}
                         <motion.button
-                            className="p-2.5 cursor-pointer rounded-full bg-rose-500 text-white"
+                            className="p-2.5 cursor-pointer rounded-full text-white"
+                            style={{
+                                backgroundColor: "#f43f5e"
+                            }}
                             whileHover={{
                                 backgroundColor: "#be123c",
                                 scale: 1.1
