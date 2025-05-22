@@ -21,20 +21,61 @@ export const BookCard = ({ title, author, price, image } : BookCardProps) => {
                 <div className="flex justify-between items-center mt-4">
                     <div className="flex space-x-3">
                         {/* Add to Cart Button */}
-                        <motion.button className="px-6 py-2 cursor-pointer rounded-full bg-slate-700 hover:bg-slate-800 text-white text-sm transition-all duration-300 hover:font-medium transform hover:scale-[1.02]">
+                        <motion.button
+                            className="px-6 py-2 cursor-pointer rounded-full bg-slate-700 text-white text-sm"
+                            whileHover={{
+                                backgroundColor: "#1e293b",
+                                scale: 1.02,
+                                fontWeight: "medium"
+                            }}
+                            whileTap={{
+                                scale: 0.95,
+                                boxShadow: "0 2px 5px rgba(0,0,0,0.2)"
+                            }}
+                            transition={{
+                                type: "spring",
+                                stiffness: 400,
+                                damping: 10
+                            }}
+                        >
                             Add to Cart
                         </motion.button>
 
                         {/* View Icon Button */}
                         <motion.button
-                            className="p-2.5 cursor-pointer rounded-full border-2 border-slate-700 text-slate-700 hover:bg-slate-100 transition-all duration-300 transform hover:scale-110"
-                            whileHover={{ backgroundColor: "#f1f5f9" }}
+                            className="p-2.5 cursor-pointer rounded-full border-2 border-slate-700 text-slate-700"
+                            whileHover={{
+                                backgroundColor: "#f1f5f9",
+                                scale: 1.1
+                            }}
+                            whileTap={{
+                                scale: 0.9,
+                                backgroundColor: "#e2e8f0"
+                            }}
+                            transition={{
+                                type: "spring",
+                                stiffness: 300
+                            }}
                         >
                             <EyeIcon className="w-6 h-6" />
                         </motion.button>
 
                         {/* Bookmark Button */}
-                        <motion.button className="p-2.5 cursor-pointer rounded-full bg-rose-500 text-white hover:bg-rose-700 transition-all duration-300 transform hover:scale-110">
+                        <motion.button
+                            className="p-2.5 cursor-pointer rounded-full bg-rose-500 text-white"
+                            whileHover={{
+                                backgroundColor: "#be123c",
+                                scale: 1.1
+                            }}
+                            whileTap={{
+                                scale: 0.9,
+                                backgroundColor: "#9f1239"
+                            }}
+                            transition={{
+                                type: "spring",
+                                stiffness: 300
+                            }}
+                        >
                             <BookmarkIcon className="w-6 h-6" />
                         </motion.button>
                     </div>
