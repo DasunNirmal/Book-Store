@@ -3,6 +3,7 @@ import {useSidebar} from "../components/SIdebarContext.tsx";
 import {CheckIcon, MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import {useState} from "react";
 import {BookCard} from "../components/BookCard.tsx";
+import {Footer} from "../components/Footer.tsx";
 
 export const Discover = () => {
 
@@ -38,7 +39,7 @@ export const Discover = () => {
                 initial={{ width: `calc(100% - ${sidebarWidth}px)` }}
                 animate={{ width: `calc(100% - ${sidebarWidth}px)` }}
                 transition={{ type: "spring", stiffness: 100, delay: open ? 0 : 0.5 }}
-                className='absolute top-0 right-0 border-2 border-amber-600'>
+                className='absolute top-0 right-0'>
 
                 {/*Search Bar*/}
                 <div className="relative top-0 z-50 w-full py-4 px-8">
@@ -196,6 +197,9 @@ export const Discover = () => {
                         />
                     </div>
                 </div>
+
+                {/* Footer section */}
+                <Footer />
             </motion.div>
         </>
     );
