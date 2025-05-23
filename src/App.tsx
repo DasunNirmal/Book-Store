@@ -7,6 +7,7 @@ import {store} from "./store/Store.ts";
 import {Discover} from "./pages/Discover.tsx";
 import {BookMark} from "./pages/BookMark.tsx";
 import {Cart} from "./pages/Cart.tsx";
+import {BookmarkProvider} from "./components/BookMarkProvider.tsx";
 
 function App() {
 
@@ -24,7 +25,9 @@ function App() {
     return (
         <>
             <Provider store={store}>
-                <RouterProvider router={routers}/>
+                <BookmarkProvider>
+                    <RouterProvider router={routers}/>
+                </BookmarkProvider>
             </Provider>
         </>
     )
