@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { BookmarkIcon } from "@heroicons/react/24/outline";
 import { EyeIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
+import {useBookmark} from "./BookMarkProvider.tsx";
 
 interface BookCardProps {
     title: string;
@@ -14,6 +15,16 @@ interface BookCardProps {
 export const BookCard = ({ title, author, price, image, description = "This book explores fascinating concepts..." }: BookCardProps) => {
 
     const [isViewOpen, setIsViewOpen] = useState(false);
+    const { addBookmark, removeBookmark, isBookmarked } = useBookmark();
+    const isBooked = isBookmarked(title);
+
+    const handleBookmark = () => {
+        if (isBooked) {
+            removeBookmark(title);
+        } else {
+            addBookmark({ title, author, price, image, description });
+        }
+    };
 
     return (
         <>
@@ -68,6 +79,7 @@ export const BookCard = ({ title, author, price, image, description = "This book
                                 }}
                                 whileTap={{ scale: 0.9 }}
                                 transition={{ type: "spring", stiffness: 300 }}
+                                onClick={handleBookmark}
                             >
                                 <BookmarkIcon className="w-6 h-6" />
                             </motion.button>
