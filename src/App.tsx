@@ -6,7 +6,7 @@ import {Provider} from "react-redux";
 import {store} from "./store/Store.ts";
 import {Discover} from "./pages/Discover.tsx";
 import {BookMark} from "./pages/BookMark.tsx";
-import {Settings} from "./pages/Settings.tsx";
+import {Cart} from "./pages/Cart.tsx";
 
 function App() {
 
@@ -17,7 +17,7 @@ function App() {
                 {path: '/home', element: <Home/>},
                 {path: '/discover', element: <Discover/>},
                 {path: '/bookmark', element: <BookMark/>},
-                {path: '/settings', element: <Settings/>},
+                {path: '/settings', element: <Cart/>},
             ]}
     ])
 
