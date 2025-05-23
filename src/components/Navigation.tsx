@@ -1,5 +1,10 @@
 import {Tab} from "./Tab.tsx";
-import {ArrowLeftStartOnRectangleIcon, BookmarkIcon, Cog6ToothIcon, HomeIcon} from "@heroicons/react/24/outline";
+import {
+    ArrowLeftStartOnRectangleIcon,
+    BookmarkIcon,
+    HomeIcon,
+    ShoppingCartIcon
+} from "@heroicons/react/24/outline";
 import {CompassIcon} from "@sidekickicons/react/24/outline";
 import {Cursor} from "./Cursor.tsx";
 import {motion} from "framer-motion";
@@ -47,7 +52,7 @@ export const Navigation = ({ open, setOpen }: { open: boolean, setOpen: Dispatch
                                 initial={{ x: -20, opacity: 0 }}
                                 animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
                                 transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.4}}
-                                className={`text-slate-700 absolute left-[120px] top-[15px] ${!open ? 'pointer-events-none' : ''}`}>Home</motion.span>
+                                className={`text-slate-700 absolute left-[120px] top-[18px] ${!open ? 'pointer-events-none' : ''}`}>Home</motion.span>
                         </Link>
                         <Link className={`${activePage('discover')}`} to='/discover'>
                             <Tab setPosition={setPosition}><CompassIcon className='h-8 w-8'/></Tab>
@@ -63,15 +68,15 @@ export const Navigation = ({ open, setOpen }: { open: boolean, setOpen: Dispatch
                                 initial={{ x: -20, opacity: 0 }}
                                 animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
                                 transition={{type: "spring", stiffness: 100, delay: open ? 0.2 : 0.2}}
-                                className={`text - slate - 700 absolute left-[120px] top-[245px] ${!open ? 'pointer-events-none' : ''}`}>Bookmark</motion.span>
+                                className={`text - slate - 700 absolute left-[120px] top-[250px] ${!open ? 'pointer-events-none' : ''}`}>Bookmark</motion.span>
                         </Link>
                         <Link className={`${activePage('settings')}`} to='/settings'>
-                            <Tab setPosition={setPosition}><Cog6ToothIcon className='h-8 w-8'/></Tab>
+                            <Tab setPosition={setPosition}><ShoppingCartIcon className='h-8 w-8'/></Tab>
                             <motion.span 
                                 initial={{ x: -20, opacity: 0 }}
                                 animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
                                 transition={{type: "spring", stiffness: 100, delay: open ? 0.3 : 0.1}}
-                                className={`text - slate - 700 absolute left-[120px] top-[360px] ${!open ? 'pointer-events-none' : ''}`}>Settings</motion.span>
+                                className={`text - slate - 700 absolute left-[120px] top-[365px] ${!open ? 'pointer-events-none' : ''}`}>Cart</motion.span>
                         </Link>
                         <div>
                             <Tab setPosition={setPosition}><ArrowLeftStartOnRectangleIcon className='h-8 w-8'/></Tab>
@@ -79,7 +84,7 @@ export const Navigation = ({ open, setOpen }: { open: boolean, setOpen: Dispatch
                                 initial={{ x: -20, opacity: 0 }}
                                 animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
                                 transition={{type: "spring", stiffness: 100, delay: open ? 0.4 : 0}}
-                                className={`text - slate - 700 absolute left-[120px] top-[478px] ${!open ? 'pointer-events-none' : ''}`}>Logout</motion.span>
+                                className={`text - slate - 700 absolute left-[120px] top-[480px] ${!open ? 'pointer-events-none' : ''}`}>Logout</motion.span>
                         </div>
                         <Cursor position={position}/>
                     </div>
