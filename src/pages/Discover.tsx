@@ -99,7 +99,7 @@ export const Discover = () => {
                 {/* Books Grid Section */}
                 <div className="p-8 pt-0">
                     <h2 className="text-2xl font-semibold text-slate-700 mb-6">Featured Books</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10">
                         {/* Row 1 */}
                         <BookCard
                             title="Atomic Habits"
