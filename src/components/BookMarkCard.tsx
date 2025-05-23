@@ -46,7 +46,7 @@ export const BookmarkCard = ({ title, author, price, image, description = "No de
                         <div className="flex justify-end space-x-3 mt-4">
                             {/* View Button */}
                             <motion.button
-                                className="p-2 rounded-full border-2 border-slate-700 text-slate-700 hover:bg-slate-100"
+                                className="p-2 rounded-full cursor-pointer border-2 border-slate-700 text-slate-700 hover:bg-slate-100"
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 transition={{ type: "spring", stiffness: 300 }}
@@ -57,7 +57,7 @@ export const BookmarkCard = ({ title, author, price, image, description = "No de
 
                             {/* Delete Button */}
                             <motion.button
-                                className="p-2 rounded-full bg-rose-500 text-white hover:bg-rose-700"
+                                className="p-2 rounded-full cursor-pointer bg-rose-500 text-white hover:bg-rose-700"
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 transition={{ type: "spring", stiffness: 300 }}
