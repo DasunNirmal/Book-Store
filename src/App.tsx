@@ -8,6 +8,7 @@ import {Discover} from "./pages/Discover.tsx";
 import {BookMark} from "./pages/BookMark.tsx";
 import {Cart} from "./pages/Cart.tsx";
 import {BookmarkProvider} from "./components/BookMarkProvider.tsx";
+import {CartProvider} from "./components/CartProvider.tsx";
 
 function App() {
 
@@ -26,7 +27,9 @@ function App() {
         <>
             <Provider store={store}>
                 <BookmarkProvider>
-                    <RouterProvider router={routers}/>
+                    <CartProvider>
+                        <RouterProvider router={routers}/>
+                    </CartProvider>
                 </BookmarkProvider>
             </Provider>
         </>
