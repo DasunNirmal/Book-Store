@@ -1,6 +1,6 @@
 import {createContext, useContext, useEffect, useState} from "react";
 
-interface Book {
+export interface Book {
     title: string;
     author: string;
     price: string | number;
