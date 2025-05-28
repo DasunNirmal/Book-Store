@@ -4,6 +4,7 @@ import { TrashIcon } from "@heroicons/react/24/solid";
 import { EyeIcon } from "@heroicons/react/24/solid";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
+import {useCart} from "./CartProvider.tsx";
 
 interface BookmarkCardProps {
     title: string;
@@ -14,8 +15,10 @@ interface BookmarkCardProps {
 }
 
 export const BookmarkCard = ({ title, author, price, image, description = "No description available" }: BookmarkCardProps) => {
+
     const { removeBookmark } = useBookmark();
     const [isViewOpen, setIsViewOpen] = useState(false);
+    const { addToCart } = useCart();
 
     return (
         <>
@@ -128,6 +131,7 @@ export const BookmarkCard = ({ title, author, price, image, description = "No de
                                             <motion.button
                                                 className="px-8 py-3 rounded-full cursor-pointer bg-slate-700 text-white hover:bg-slate-800 transition-colors"
                                                 whileTap={{ scale: 0.95 }}
+                                                onClick={() => addToCart({ title, author, price, image, description })}
                                             >
                                                 Add to Cart
                                             </motion.button>
