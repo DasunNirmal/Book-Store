@@ -3,6 +3,7 @@ import { BookmarkIcon } from "@heroicons/react/24/outline";
 import { EyeIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import {useBookmark} from "./BookMarkProvider.tsx";
+import {useCart} from "./CartProvider.tsx";
 
 interface BookCardProps {
     title: string;
@@ -17,6 +18,7 @@ export const BookCard = ({ title, author, price, image, description = "This book
     const [isViewOpen, setIsViewOpen] = useState(false);
     const { addBookmark, removeBookmark, isBookmarked } = useBookmark();
     const isBooked = isBookmarked(title);
+    const { addToCart } = useCart();
 
     const handleBookmark = () => {
         if (isBooked) {
@@ -51,6 +53,7 @@ export const BookCard = ({ title, author, price, image, description = "This book
                                 }}
                                 whileTap={{ scale: 0.95 }}
                                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                                onClick={() => addToCart({ title, author, price, image, description })}
                             >
                                 Add to Cart
                             </motion.button>
@@ -147,6 +150,7 @@ export const BookCard = ({ title, author, price, image, description = "This book
                                             <motion.button
                                                 className="px-8 py-3 rounded-full cursor-pointer bg-slate-700 text-white hover:bg-slate-800 transition-colors"
                                                 whileTap={{ scale: 0.95 }}
+                                                onClick={() => addToCart({ title, author, price, image, description })}
                                             >
                                                 Add to Cart
                                             </motion.button>
