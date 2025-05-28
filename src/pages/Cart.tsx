@@ -65,14 +65,14 @@ export const Cart = () => {
                                                 className="p-1 rounded-full hover:bg-slate-100"
                                                 disabled={item.quantity <= 1}
                                             >
-                                                <MinusIcon className="w-4 h-4 text-slate-700" />
+                                                <MinusIcon className="w-4 h-4 text-slate-700 cursor-pointer" />
                                             </button>
                                             <span className="mx-2">{item.quantity}</span>
                                             <button
                                                 onClick={() => updateQuantity(item.title, item.quantity + 1)}
                                                 className="p-1 rounded-full hover:bg-slate-100"
                                             >
-                                                <PlusIcon className="w-4 h-4 text-slate-700" />
+                                                <PlusIcon className="w-4 h-4 text-slate-700 cursor-pointer" />
                                             </button>
                                         </div>
                                     </td>
@@ -82,9 +82,9 @@ export const Cart = () => {
                                     <td className="py-4">
                                         <button
                                             onClick={() => removeFromCart(item.title)}
-                                            className="p-2 rounded-full hover:bg-rose-100 text-rose-500"
+                                            className="p-2 rounded-full hover:bg-rose-100 text-rose-500 cursor-pointer"
                                         >
-                                            <XMarkIcon className="w-5 h-5" />
+                                            <XMarkIcon className="w-5 h-5 cursor-pointer" />
                                         </button>
                                     </td>
                                 </tr>
@@ -104,7 +104,7 @@ export const Cart = () => {
                                 <motion.button
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
-                                    className="w-full py-3 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition-colors"
+                                    className="w-full py-3 bg-rose-500 text-white rounded-full cursor-pointer hover:bg-rose-600 transition-colors"
                                 >
                                     Proceed to Checkout
                                 </motion.button>
