@@ -9,7 +9,7 @@ export const Cart = () => {
 
     const { open } = useSidebar();
     const sidebarWidth = open ? 240 : 80;
-    const { cartItems, removeFromCart, updateQuantity } = useCart(); // Assuming similar context to bookmarks
+    const { cartItems, removeFromCart, updateQuantity } = useCart();
 
     const subtotal = cartItems.reduce(
         (sum, item) => sum + (Number(typeof item.price === 'string' ? item.price.replace('$', '') : item.price) * item.quantity),
