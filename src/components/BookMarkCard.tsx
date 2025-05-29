@@ -18,7 +18,7 @@ export const BookmarkCard = ({ title, author, price, image, description = "No de
 
     const { removeBookmark } = useBookmark();
     const [isViewOpen, setIsViewOpen] = useState(false);
-    const { addToCart } = useCart();
+    const { addToCart, buyNow } = useCart();
 
     return (
         <>
@@ -138,6 +138,7 @@ export const BookmarkCard = ({ title, author, price, image, description = "No de
                                             <motion.button
                                                 className="px-8 py-3 rounded-full border-2 cursor-pointer border-rose-700 text-slate-700 hover:bg-rose-500 hover:font-bold hover:text-white transition-colors"
                                                 whileTap={{ scale: 0.95 }}
+                                                onClick={() => buyNow({ title, author, price, image, description })}
                                             >
                                                 Buy Now
                                             </motion.button>
