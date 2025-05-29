@@ -10,6 +10,7 @@ export const Cart = () => {
     const { open } = useSidebar();
     const sidebarWidth = open ? 240 : 80;
     const { cartItems, removeFromCart, updateQuantity } = useCart();
+    const { openCheckout } = useCart();
 
     const subtotal = cartItems.reduce(
         (sum, item) => sum + (Number(typeof item.price === 'string' ? item.price.replace('$', '') : item.price) * item.quantity),
@@ -105,6 +106,7 @@ export const Cart = () => {
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                     className="w-full py-3 bg-rose-500 text-white rounded-full cursor-pointer hover:bg-rose-600 transition-colors"
+                                    onClick={openCheckout}
                                 >
                                     Proceed to Checkout
                                 </motion.button>
