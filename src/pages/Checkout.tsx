@@ -193,7 +193,7 @@ export const Checkout = () => {
                                 </div>
                             </div>
 
-                            {/* Right Side - Order Summary (stone-300) */}
+                            {/* Right Side*/}
                             <div className="w-full lg:w-1/2 bg-stone-300 p-8">
                                 <div className="rounded-xl shadow-sm p-6 sticky top-20">
                                     <h2 className="text-2xl font-bold text-slate-800 mb-6">Order Summary</h2>
