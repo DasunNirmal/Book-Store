@@ -10,6 +10,10 @@ interface CartContextType {
     addToCart: (book: Book) => void;
     removeFromCart: (title: string) => void;
     updateQuantity: (title: string, quantity: number) => void;
+    isCheckoutOpen: boolean;
+    openCheckout: () => void;
+    closeCheckout: () => void;
+    buyNow: (book: Book) => void;
 }
 
 const CartContext = createContext<CartContextType>({
@@ -17,13 +21,22 @@ const CartContext = createContext<CartContextType>({
     addToCart: () => {},
     removeFromCart: () => {},
     updateQuantity: () => {},
+    isCheckoutOpen: false,
+    openCheckout: () => {},
+    closeCheckout: () => {},
+    buyNow: () => {},
 });
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
+
+    const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
     const [cartItems, setCartItems] = useState<CartItem[]>(() => {
         const saved = localStorage.getItem("cart");
         return saved ? JSON.parse(saved) : [];
     });
+
+    const openCheckout = () => setIsCheckoutOpen(true);
+    const closeCheckout = () => setIsCheckoutOpen(false);
 
     useEffect(() => {
         localStorage.setItem("cart", JSON.stringify(cartItems));
@@ -56,8 +69,22 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         );
     };
 
+    const buyNow = (book: Book) => {
+        addToCart(book); // Add the book to cart
+        openCheckout();  // Open checkout
+    };
+
     return (
-        <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateQuantity }}>
+        <CartContext.Provider value={{
+            cartItems,
+            addToCart,
+            removeFromCart,
+            updateQuantity,
+            isCheckoutOpen,
+            openCheckout,
+            closeCheckout,
+            buyNow
+        }}>
             {children}
         </CartContext.Provider>
     );
