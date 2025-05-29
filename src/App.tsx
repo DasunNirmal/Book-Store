@@ -7,8 +7,8 @@ import {store} from "./store/Store.ts";
 import {Discover} from "./pages/Discover.tsx";
 import {BookMark} from "./pages/BookMark.tsx";
 import {Cart} from "./pages/Cart.tsx";
-import {BookmarkProvider} from "./components/BookMarkProvider.tsx";
-import {CartProvider} from "./components/CartProvider.tsx";
+import {BookmarkProvider} from "./components/providers/BookMarkProvider.tsx";
+import {CartProvider} from "./components/providers/CartProvider.tsx";
 
 function App() {
 
