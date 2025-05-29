@@ -19,6 +19,7 @@ export const BookCard = ({ title, author, price, image, description = "This book
     const { addBookmark, removeBookmark, isBookmarked } = useBookmark();
     const isBooked = isBookmarked(title);
     const { addToCart } = useCart();
+    const { buyNow } = useCart();
 
     const handleBookmark = () => {
         if (isBooked) {
@@ -157,6 +158,11 @@ export const BookCard = ({ title, author, price, image, description = "This book
                                             <motion.button
                                                 className="px-8 py-3 rounded-full border-2 cursor-pointer border-rose-700 text-slate-700 hover:bg-rose-500 hover:font-bold hover:text-white transition-colors"
                                                 whileTap={{ scale: 0.95 }}
+                                                /*onClick={() => {
+                                                    addToCart({ title, author, price, image, description });
+                                                    openCheckout();
+                                                }}*/
+                                                onClick={() => buyNow({ title, author, price, image, description })}
                                             >
                                                 Buy Now
                                             </motion.button>
