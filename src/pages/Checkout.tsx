@@ -2,11 +2,11 @@ import {AnimatePresence, motion} from "framer-motion";
 import {useState} from "react";
 import {ChevronDownIcon} from "@heroicons/react/24/outline";
 import {useCart} from "../components/providers/CartProvider.tsx";
-import {XMarkIcon} from "@heroicons/react/24/solid";
+import {TrashIcon, XMarkIcon} from "@heroicons/react/24/solid";
 
 export const Checkout = () => {
 
-    const { cartItems, closeCheckout, isCheckoutOpen } = useCart();
+    const { cartItems, closeCheckout, isCheckoutOpen, removeFromCart } = useCart();
     const [paymentMethod, setPaymentMethod] = useState<string>("card");
 
     const countries = ["United States", "Canada", "United Kingdom", "Australia"];
@@ -152,6 +152,34 @@ export const Checkout = () => {
                                                 <span className="font-medium">Credit/Debit Card</span>
                                             </div>
                                         </div>
+
+                                        {paymentMethod === "card" && (
+                                        <div className="p-4 border border-stone-300 rounded-lg bg-white space-y-3">
+                                            <input
+                                                type="text"
+                                                placeholder="Card Number"
+                                                className="w-full p-3 border border-stone-300 rounded-lg focus:ring-rose-500"
+                                            />
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <input
+                                                    type="text"
+                                                    placeholder="MM/YY"
+                                                    className="p-3 border border-stone-300 rounded-lg focus:ring-rose-500"
+                                                />
+                                                <input
+                                                    type="text"
+                                                    placeholder="CVV"
+                                                    className="p-3 border border-stone-300 rounded-lg focus:ring-rose-500"
+                                                />
+                                            </div>
+                                            <input
+                                                type="text"
+                                                placeholder="Name on Card"
+                                                className="w-full p-3 border border-stone-300 rounded-lg focus:ring-rose-500"
+                                            />
+                                        </div>
+                                        )}
+
                                         <div
                                             className={`p-4 border rounded-lg cursor-pointer ${paymentMethod === "cash" ? "border-rose-500 bg-rose-50" : "border-stone-300"}`}
                                             onClick={() => setPaymentMethod("cash")}
@@ -171,7 +199,7 @@ export const Checkout = () => {
                                     <h2 className="text-2xl font-bold text-slate-800 mb-6">Order Summary</h2>
 
                                     {/* Cart Items List */}
-                                    <div className="max-h-[200px] overflow-y-auto mb-4">
+                                    <div className="overflow-y-auto mb-4">
                                         {cartItems.map(item => (
                                             <div key={item.title} className="flex justify-between py-2 border-b border-stone-100">
                                                 <div className="flex items-center">
@@ -185,8 +213,14 @@ export const Checkout = () => {
                                                         <p className="text-xs text-stone-500">Qty: {item.quantity}</p>
                                                     </div>
                                                 </div>
-                                                <span className="font-medium">
+                                                <span className="font-medium grid items-center justify-center content-between">
                                                     ${(Number(typeof item.price === 'string' ? item.price.replace('$', '') : item.price) * item.quantity).toFixed(2)}
+                                                    <button
+                                                        onClick={() => removeFromCart(item.title)}
+                                                        className="p-2 text-rose-500 cursor-pointer hover:text-rose-700"
+                                                    >
+                                                        <TrashIcon className="w-5 h-5" />
+                                                    </button>
                                                 </span>
                                             </div>
                                         ))}
@@ -216,7 +250,7 @@ export const Checkout = () => {
                                     <motion.button
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
-                                        className={`w-full py-3 rounded-full text-white font-medium ${paymentMethod === "card" ? "bg-rose-500 hover:bg-rose-600" : "bg-slate-700 hover:bg-slate-800"}`}
+                                        className={`w-full py-3 rounded-full text-white cursor-pointer font-medium ${paymentMethod === "card" ? "bg-rose-500 hover:bg-rose-600" : "bg-slate-700 hover:bg-slate-800"}`}
                                     >
                                         {paymentMethod === "card" ? "Pay Now" : "Place Order"}
                                     </motion.button>
