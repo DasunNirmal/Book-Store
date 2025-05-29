@@ -1,6 +1,6 @@
 import {motion} from "framer-motion";
 import {useSidebar} from "../components/SIdebarContext.tsx";
-import {useCart} from "../components/CartProvider.tsx";
+import {useCart} from "../components/providers/CartProvider.tsx";
 import {XMarkIcon} from "@heroicons/react/24/solid";
 import {MinusIcon, PlusIcon} from "@heroicons/react/24/outline";
 import {Footer} from "../components/Footer.tsx";
