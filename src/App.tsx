@@ -9,6 +9,7 @@ import {BookMark} from "./pages/BookMark.tsx";
 import {Cart} from "./pages/Cart.tsx";
 import {BookmarkProvider} from "./components/providers/BookMarkProvider.tsx";
 import {CartProvider} from "./components/providers/CartProvider.tsx";
+import {Checkout} from "./pages/Checkout.tsx";
 
 function App() {
 
@@ -19,7 +20,7 @@ function App() {
                 {path: '/home', element: <Home/>},
                 {path: '/discover', element: <Discover/>},
                 {path: '/bookmark', element: <BookMark/>},
-                {path: '/settings', element: <Cart/>},
+                {path: '/cart', element: <Cart/>},
             ]}
     ])
 
@@ -29,6 +30,7 @@ function App() {
                 <BookmarkProvider>
                     <CartProvider>
                         <RouterProvider router={routers}/>
+                        <Checkout />
                     </CartProvider>
                 </BookmarkProvider>
             </Provider>
