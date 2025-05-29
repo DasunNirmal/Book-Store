@@ -2,8 +2,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { BookmarkIcon } from "@heroicons/react/24/outline";
 import { EyeIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
-import {useBookmark} from "./BookMarkProvider.tsx";
-import {useCart} from "./CartProvider.tsx";
+import {useBookmark} from "./providers/BookMarkProvider.tsx";
+import {useCart} from "./providers/CartProvider.tsx";
 
 interface BookCardProps {
     title: string;

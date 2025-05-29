@@ -1,6 +1,6 @@
 import {motion} from "framer-motion";
 import {useSidebar} from "../components/SIdebarContext.tsx";
-import {useBookmark} from "../components/BookMarkProvider.tsx";
+import {useBookmark} from "../components/providers/BookMarkProvider.tsx";
 import {BookmarkCard} from "../components/BookMarkCard.tsx";
 
 export const BookMark = () => {
