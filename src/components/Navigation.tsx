@@ -70,7 +70,7 @@ export const Navigation = ({ open, setOpen }: { open: boolean, setOpen: Dispatch
                                 transition={{type: "spring", stiffness: 100, delay: open ? 0.2 : 0.2}}
                                 className={`text - slate - 700 absolute left-[120px] top-[250px] ${!open ? 'pointer-events-none' : ''}`}>Bookmark</motion.span>
                         </Link>
-                        <Link className={`${activePage('settings')}`} to='/settings'>
+                        <Link className={`${activePage('cart')}`} to='/cart'>
                             <Tab setPosition={setPosition}><ShoppingCartIcon className='h-8 w-8'/></Tab>
                             <motion.span 
                                 initial={{ x: -20, opacity: 0 }}
