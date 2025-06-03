@@ -3,7 +3,7 @@ import {
     ArrowLeftStartOnRectangleIcon,
     BookmarkIcon,
     HomeIcon,
-    ShoppingCartIcon
+    ShoppingCartIcon, UserIcon
 } from "@heroicons/react/24/outline";
 import {CompassIcon} from "@sidekickicons/react/24/outline";
 import {Cursor} from "./Cursor.tsx";
@@ -51,7 +51,7 @@ export const Navigation = ({ open, setOpen }: { open: boolean, setOpen: Dispatch
                             <motion.span
                                 initial={{ x: -20, opacity: 0 }}
                                 animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
-                                transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.4}}
+                                transition={{type: "spring", stiffness: 100, delay: open ? 0.1 : 0.5}}
                                 className={`text-slate-700 absolute left-[120px] top-[18px] ${!open ? 'pointer-events-none' : ''}`}>Home</motion.span>
                         </Link>
                         <Link className={`${activePage('discover')}`} to='/discover'>
@@ -59,7 +59,7 @@ export const Navigation = ({ open, setOpen }: { open: boolean, setOpen: Dispatch
                             <motion.span
                                 initial={{ x: -20, opacity: 0 }}
                                 animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
-                                transition={{type: "spring", stiffness: 100, delay: open ? 0.1 : 0.3}}
+                                transition={{type: "spring", stiffness: 100, delay: open ? 0.2 : 0.4}}
                                 className={`text - slate - 700 absolute left-[120px] top-[130px] ${!open ? 'pointer-events-none' : ''}`}>Discover</motion.span>
                         </Link>
                         <Link className={`${activePage('bookmark')}`} to='/bookmark'>
@@ -67,7 +67,7 @@ export const Navigation = ({ open, setOpen }: { open: boolean, setOpen: Dispatch
                             <motion.span 
                                 initial={{ x: -20, opacity: 0 }}
                                 animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
-                                transition={{type: "spring", stiffness: 100, delay: open ? 0.2 : 0.2}}
+                                transition={{type: "spring", stiffness: 100, delay: open ? 0.3 : 0.3}}
                                 className={`text - slate - 700 absolute left-[120px] top-[250px] ${!open ? 'pointer-events-none' : ''}`}>Bookmark</motion.span>
                         </Link>
                         <Link className={`${activePage('cart')}`} to='/cart'>
@@ -75,16 +75,24 @@ export const Navigation = ({ open, setOpen }: { open: boolean, setOpen: Dispatch
                             <motion.span 
                                 initial={{ x: -20, opacity: 0 }}
                                 animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
-                                transition={{type: "spring", stiffness: 100, delay: open ? 0.3 : 0.1}}
+                                transition={{type: "spring", stiffness: 100, delay: open ? 0.4 : 0.2}}
                                 className={`text - slate - 700 absolute left-[120px] top-[365px] ${!open ? 'pointer-events-none' : ''}`}>Cart</motion.span>
+                        </Link>
+                        <Link className={`${activePage('user')}`} to='/user'>
+                            <Tab setPosition={setPosition}><UserIcon className='h-8 w-8'/></Tab>
+                            <motion.span
+                                initial={{ x: -20, opacity: 0 }}
+                                animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
+                                transition={{type: "spring", stiffness: 100, delay: open ? 0.5 : 0.1}}
+                                className={`text - slate - 700 absolute left-[120px] top-[483px] ${!open ? 'pointer-events-none' : ''}`}>User</motion.span>
                         </Link>
                         <div>
                             <Tab setPosition={setPosition}><ArrowLeftStartOnRectangleIcon className='h-8 w-8'/></Tab>
                             <motion.span
                                 initial={{ x: -20, opacity: 0 }}
                                 animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
-                                transition={{type: "spring", stiffness: 100, delay: open ? 0.4 : 0}}
-                                className={`text - slate - 700 absolute left-[120px] top-[480px] ${!open ? 'pointer-events-none' : ''}`}>Logout</motion.span>
+                                transition={{type: "spring", stiffness: 100, delay: open ? 0.6 : 0}}
+                                className={`text - slate - 700 absolute left-[120px] top-[595px] ${!open ? 'pointer-events-none' : ''}`}>Logout</motion.span>
                         </div>
                         <Cursor position={position}/>
                     </div>
