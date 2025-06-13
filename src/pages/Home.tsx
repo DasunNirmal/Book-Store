@@ -8,6 +8,7 @@ import {
     TruckIcon
 } from "@heroicons/react/24/outline";
 import {ArrowRightIcon} from "@heroicons/react/24/solid";
+import {Link} from "react-router";
 
 export const Home = () => {
 
@@ -46,12 +47,14 @@ export const Home = () => {
                     {/* Absolutely centered button at the bottom of the container */}
                     <div
                         className="absolute left-1/2 bottom-90 transform -translate-x-1/2 z-20 transition-all duration-300 rounded-full hover:rounded-xl active:rounded-2xl">
-                        <button className="w-[200px] rounded-3xl border-2 border-dashed border-black bg-rose-500 px-6 py-3
+                        <Link to="/discover">
+                            <button className="w-[200px] rounded-3xl border-2 border-dashed border-black bg-rose-500 px-6 py-3
                     font-semibold text-[#F4F5F6] cursor-pointer transition-all duration-300 hover:translate-x-[-4px]
                     hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_black] active:translate-x-[0px]
                     active:translate-y-[0px] active:rounded-2xl active:shadow-none">
-                            Shop Now <ArrowRightIcon className="w-6 h-6 inline ml-4"/>
-                        </button>
+                                Shop Now <ArrowRightIcon className="w-6 h-6 inline ml-4"/>
+                            </button>
+                        </Link>
                     </div>
                 </div>
 

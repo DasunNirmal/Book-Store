@@ -46,7 +46,7 @@ export const Navigation = ({ open, setOpen }: { open: boolean, setOpen: Dispatch
                                  opacity: 0,
                              }));
                          }}>
-                        <Link className={`${activePage('home')}`} to='/home'>
+                        <Link className={`${activePage('home')},${activePage('')}`} to='/home'>
                             <Tab setPosition={setPosition}><HomeIcon className='h-8 w-8'/></Tab>
                             <motion.span
                                 initial={{ x: -20, opacity: 0 }}

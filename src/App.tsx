@@ -18,6 +18,7 @@ function App() {
         {path: '',
             element: <RootLayout/>,
             children: [
+                {path: '', element: <Home/>},
                 {path: '/home', element: <Home/>},
                 {path: '/discover', element: <Discover/>},
                 {path: '/bookmark', element: <BookMark/>},

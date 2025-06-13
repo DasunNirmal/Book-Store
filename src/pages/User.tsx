@@ -53,7 +53,7 @@ export const User = () => {
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                     onClick={() => setIsEditing(true)}
-                                    className="flex items-center gap-2 px-4 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-colors"
+                                    className="flex items-center gap-2 px-4 py-2 bg-rose-500 cursor-pointer text-white rounded-lg hover:bg-rose-600 transition-colors"
                                 >
                                     <PencilIcon className="w-5 h-5" />
                                     Edit Profile
@@ -64,7 +64,7 @@ export const User = () => {
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
                                         onClick={handleSave}
-                                        className="px-4 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-colors"
+                                        className="px-4 py-2 bg-rose-500 text-white cursor-pointer rounded-lg hover:bg-rose-600 transition-colors"
                                     >
                                         Save Changes
                                     </motion.button>
@@ -72,7 +72,7 @@ export const User = () => {
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
                                         onClick={() => setIsEditing(false)}
-                                        className="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-100 transition-colors"
+                                        className="px-4 py-2 border border-slate-300 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors"
                                     >
                                         Cancel
                                     </motion.button>
@@ -152,7 +152,7 @@ export const User = () => {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={handleDeleteAccount}
-                                className="flex items-center gap-2 px-4 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-colors"
+                                className="flex items-center cursor-pointer gap-2 px-4 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-colors"
                             >
                                 <TrashIcon className="w-5 h-5" />
                                 Delete Account
