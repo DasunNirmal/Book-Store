@@ -16,7 +16,6 @@ export const Navigation = ({ open, setOpen }: { open: boolean, setOpen: Dispatch
 
     const [position, setPosition] = useState({top: 0, height: 0, opacity: 0,});
 
-    // const navigate = useNavigate();
     const {pathname} = useLocation();
     let subpage = pathname.split("/")?.[1];
 
@@ -32,95 +31,97 @@ export const Navigation = ({ open, setOpen }: { open: boolean, setOpen: Dispatch
     }
 
     return (
-        <SidebarContext.Provider value={{open}}>
-            {/*Main Container*/}
-            <motion.div animate={{width: open ? "240px" : "80px"}} 
-                        transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
-                        className='flex flex-col w-[80px] h-[928px] z-[2] top-0 left-0 fixed after:absolute after:right-0 after:top-0 after:bottom-0 after:m-auto after:h-9/10 after:w-[1px] after:bg-slate-700/50 justify-center items-center gap-15'>
-                <div className='absolute left-0 w-[80px] h-fit'>
-                    {/*Navigation*/}
-                    <div className='flex flex-col w-[80px] h-fit top-0 left-0 relative justify-center items-center gap-15 bg-stone-50'
-                         onMouseLeave={() => {
-                             setPosition((pv) => ({
-                                 ...pv,
-                                 opacity: 0,
-                             }));
-                         }}>
-                        <Link className={`${activePage('home')},${activePage('')}`} to='/home'>
-                            <Tab setPosition={setPosition}><HomeIcon className='h-8 w-8'/></Tab>
-                            <motion.span
-                                initial={{ x: -20, opacity: 0 }}
-                                animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
-                                transition={{type: "spring", stiffness: 100, delay: open ? 0.1 : 0.5}}
-                                className={`text-slate-700 absolute left-[120px] top-[18px] ${!open ? 'pointer-events-none' : ''}`}>Home</motion.span>
-                        </Link>
-                        <Link className={`${activePage('discover')}`} to='/discover'>
-                            <Tab setPosition={setPosition}><CompassIcon className='h-8 w-8'/></Tab>
-                            <motion.span
-                                initial={{ x: -20, opacity: 0 }}
-                                animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
-                                transition={{type: "spring", stiffness: 100, delay: open ? 0.2 : 0.4}}
-                                className={`text - slate - 700 absolute left-[120px] top-[130px] ${!open ? 'pointer-events-none' : ''}`}>Discover</motion.span>
-                        </Link>
-                        <Link className={`${activePage('bookmark')}`} to='/bookmark'>
-                            <Tab setPosition={setPosition}><BookmarkIcon className='h-8 w-8'/></Tab>
-                            <motion.span 
-                                initial={{ x: -20, opacity: 0 }}
-                                animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
-                                transition={{type: "spring", stiffness: 100, delay: open ? 0.3 : 0.3}}
-                                className={`text - slate - 700 absolute left-[120px] top-[250px] ${!open ? 'pointer-events-none' : ''}`}>Bookmark</motion.span>
-                        </Link>
-                        <Link className={`${activePage('cart')}`} to='/cart'>
-                            <Tab setPosition={setPosition}><ShoppingCartIcon className='h-8 w-8'/></Tab>
-                            <motion.span 
-                                initial={{ x: -20, opacity: 0 }}
-                                animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
-                                transition={{type: "spring", stiffness: 100, delay: open ? 0.4 : 0.2}}
-                                className={`text - slate - 700 absolute left-[120px] top-[365px] ${!open ? 'pointer-events-none' : ''}`}>Cart</motion.span>
-                        </Link>
-                        <Link className={`${activePage('user')}`} to='/user'>
-                            <Tab setPosition={setPosition}><UserIcon className='h-8 w-8'/></Tab>
-                            <motion.span
-                                initial={{ x: -20, opacity: 0 }}
-                                animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
-                                transition={{type: "spring", stiffness: 100, delay: open ? 0.5 : 0.1}}
-                                className={`text - slate - 700 absolute left-[120px] top-[483px] ${!open ? 'pointer-events-none' : ''}`}>User</motion.span>
-                        </Link>
-                        <div>
-                            <Tab setPosition={setPosition}><ArrowLeftStartOnRectangleIcon className='h-8 w-8'/></Tab>
-                            <motion.span
-                                initial={{ x: -20, opacity: 0 }}
-                                animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
-                                transition={{type: "spring", stiffness: 100, delay: open ? 0.6 : 0}}
-                                className={`text - slate - 700 absolute left-[120px] top-[595px] ${!open ? 'pointer-events-none' : ''}`}>Logout</motion.span>
-                        </div>
-                        <Cursor position={position}/>
-                    </div>
-                </div>
-                {/*Menu Button*/}
-                <motion.div onClick={() => setOpen(!open)} 
-                    animate={{right: open ? "10px" : "18px"}} 
-                    transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
-                    className='z-10 rounded-full border-2 border-slate-700 w-[48px] h-[48px] absolute bottom-0 mb-8 cursor-pointer'>
-                    <div className='absolute w-fit h-fit m-auto top-1 left-0 bottom-0 right-0'>
-                        <input type='checkbox' className='appearance-none hidden invisible'/>
-                        <div className='relative w-[18px] h-[18px]'>
-                            <motion.span 
-                                animate={{rotate: open ? -45 : 0, y: open ? 1.5 : 0, width: open ? "58%" : "13px"}}
-                                transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
-                                className='block relative w-[13px] h-[2px] bg-slate-700 mb-1 rounded-lg'/>
-                            <motion.span 
-                                animate={{width: open ? "140%" : "18px"}}
-                                transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
-                                className='block relative w-[18px] h-[2px] bg-slate-700 mb-1 rounded-lg'/>
-                            <motion.span 
-                                animate={{ rotate: open ? 45 : 0, y: open ? -1.5 : 0, width: open ? "58%" : "13px"}}
-                                transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
-                                className='block relative w-[13px] h-[2px] bg-slate-700 mb-1 rounded-lg'/>
+        <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}>
+            <SidebarContext.Provider value={{open}}>
+                {/*Main Container*/}
+                <motion.div animate={{width: open ? "240px" : "80px"}}
+                            transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
+                            className='flex flex-col w-[80px] h-[928px] z-[2] top-0 left-0 fixed after:absolute after:right-0 after:top-0 after:bottom-0 after:m-auto after:h-9/10 after:w-[1px] after:bg-slate-700/50 justify-center items-center gap-15'>
+                    <div className='absolute left-0 w-[80px] h-fit'>
+                        {/*Navigation*/}
+                        <div className='flex flex-col w-[80px] h-fit top-0 left-0 relative justify-center items-center gap-15 bg-stone-50'
+                             onMouseLeave={() => {
+                                 setPosition((pv) => ({
+                                     ...pv,
+                                     opacity: 0,
+                                 }));
+                             }}>
+                            <Link className={`${activePage('home')},${activePage('')}`} to='/home'>
+                                <Tab setPosition={setPosition}><HomeIcon className='h-8 w-8'/></Tab>
+                                <motion.span
+                                    initial={{ x: -20, opacity: 0 }}
+                                    animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
+                                    transition={{type: "spring", stiffness: 100, delay: open ? 0.1 : 0.5}}
+                                    className={`text-slate-700 absolute left-[120px] top-[18px] ${!open ? 'pointer-events-none' : ''}`}>Home</motion.span>
+                            </Link>
+                            <Link className={`${activePage('discover')}`} to='/discover'>
+                                <Tab setPosition={setPosition}><CompassIcon className='h-8 w-8'/></Tab>
+                                <motion.span
+                                    initial={{ x: -20, opacity: 0 }}
+                                    animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
+                                    transition={{type: "spring", stiffness: 100, delay: open ? 0.2 : 0.4}}
+                                    className={`text - slate - 700 absolute left-[120px] top-[130px] ${!open ? 'pointer-events-none' : ''}`}>Discover</motion.span>
+                            </Link>
+                            <Link className={`${activePage('bookmark')}`} to='/bookmark'>
+                                <Tab setPosition={setPosition}><BookmarkIcon className='h-8 w-8'/></Tab>
+                                <motion.span
+                                    initial={{ x: -20, opacity: 0 }}
+                                    animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
+                                    transition={{type: "spring", stiffness: 100, delay: open ? 0.3 : 0.3}}
+                                    className={`text - slate - 700 absolute left-[120px] top-[250px] ${!open ? 'pointer-events-none' : ''}`}>Bookmark</motion.span>
+                            </Link>
+                            <Link className={`${activePage('cart')}`} to='/cart'>
+                                <Tab setPosition={setPosition}><ShoppingCartIcon className='h-8 w-8'/></Tab>
+                                <motion.span
+                                    initial={{ x: -20, opacity: 0 }}
+                                    animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
+                                    transition={{type: "spring", stiffness: 100, delay: open ? 0.4 : 0.2}}
+                                    className={`text - slate - 700 absolute left-[120px] top-[365px] ${!open ? 'pointer-events-none' : ''}`}>Cart</motion.span>
+                            </Link>
+                            <Link className={`${activePage('user')}`} to='/user'>
+                                <Tab setPosition={setPosition}><UserIcon className='h-8 w-8'/></Tab>
+                                <motion.span
+                                    initial={{ x: -20, opacity: 0 }}
+                                    animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
+                                    transition={{type: "spring", stiffness: 100, delay: open ? 0.5 : 0.1}}
+                                    className={`text - slate - 700 absolute left-[120px] top-[483px] ${!open ? 'pointer-events-none' : ''}`}>User</motion.span>
+                            </Link>
+                            <div>
+                                <Tab setPosition={setPosition}><ArrowLeftStartOnRectangleIcon className='h-8 w-8'/></Tab>
+                                <motion.span
+                                    initial={{ x: -20, opacity: 0 }}
+                                    animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
+                                    transition={{type: "spring", stiffness: 100, delay: open ? 0.6 : 0}}
+                                    className={`text - slate - 700 absolute left-[120px] top-[595px] ${!open ? 'pointer-events-none' : ''}`}>Logout</motion.span>
+                            </div>
+                            <Cursor position={position}/>
                         </div>
                     </div>
+                    {/*Menu Button*/}
+                    <motion.div onClick={() => setOpen(!open)}
+                                animate={{right: open ? "10px" : "18px"}}
+                                transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
+                                className='z-10 rounded-full border-2 border-slate-700 w-[48px] h-[48px] absolute bottom-0 mb-8 cursor-pointer'>
+                        <div className='absolute w-fit h-fit m-auto top-1 left-0 bottom-0 right-0'>
+                            <input type='checkbox' className='appearance-none hidden invisible'/>
+                            <div className='relative w-[18px] h-[18px]'>
+                                <motion.span
+                                    animate={{rotate: open ? -45 : 0, y: open ? 1.5 : 0, width: open ? "58%" : "13px"}}
+                                    transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
+                                    className='block relative w-[13px] h-[2px] bg-slate-700 mb-1 rounded-lg'/>
+                                <motion.span
+                                    animate={{width: open ? "140%" : "18px"}}
+                                    transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
+                                    className='block relative w-[18px] h-[2px] bg-slate-700 mb-1 rounded-lg'/>
+                                <motion.span
+                                    animate={{ rotate: open ? 45 : 0, y: open ? -1.5 : 0, width: open ? "58%" : "13px"}}
+                                    transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
+                                    className='block relative w-[13px] h-[2px] bg-slate-700 mb-1 rounded-lg'/>
+                            </div>
+                        </div>
+                    </motion.div>
                 </motion.div>
-            </motion.div>
-        </SidebarContext.Provider>
+            </SidebarContext.Provider>
+        </motion.div>
     )
 }

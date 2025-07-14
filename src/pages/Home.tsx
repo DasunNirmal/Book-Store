@@ -16,7 +16,7 @@ export const Home = () => {
     const sidebarWidth = open ? 240 : 80;
 
     return (
-        <>
+        <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}>
             <motion.div
                 initial={{width: `calc(100% - ${sidebarWidth}px)`}}
                 animate={{width: `calc(100% - ${sidebarWidth}px)`}}
@@ -309,6 +309,6 @@ export const Home = () => {
                     <p>&copy; {new Date().getFullYear()} Book Haven. All rights reserved.</p>
                 </div>
             </motion.div>
-        </>
+        </motion.div>
     );
 }

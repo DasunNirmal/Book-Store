@@ -34,7 +34,7 @@ export const Discover = () => {
     };
 
     return (
-        <>
+        <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}>
             <motion.div
                 initial={{ width: `calc(100% - ${sidebarWidth}px)` }}
                 animate={{ width: `calc(100% - ${sidebarWidth}px)` }}
@@ -201,6 +201,6 @@ export const Discover = () => {
                 {/* Footer section */}
                 <Footer />
             </motion.div>
-        </>
+        </motion.div>
     );
 }
