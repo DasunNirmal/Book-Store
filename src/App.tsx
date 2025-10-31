@@ -11,6 +11,8 @@ import {BookmarkProvider} from "./components/providers/BookMarkProvider.tsx";
 import {CartProvider} from "./components/providers/CartProvider.tsx";
 import {Checkout} from "./pages/Checkout.tsx";
 import {User} from "./pages/User.tsx";
+import { AdminProvider } from "./context/AdminContext";
+import {AdminDashboard} from "./pages/AdminDashboard.tsx";
 
 function App() {
 
@@ -24,18 +26,21 @@ function App() {
                 {path: '/bookmark', element: <BookMark/>},
                 {path: '/cart', element: <Cart/>},
                 {path: '/user', element: <User/>},
+                {path: '/admin', element: <AdminDashboard/>},
             ]}
     ])
 
     return (
         <>
             <Provider store={store}>
-                <BookmarkProvider>
-                    <CartProvider>
-                        <RouterProvider router={routers}/>
-                        <Checkout />
-                    </CartProvider>
-                </BookmarkProvider>
+                <AdminProvider>
+                    <BookmarkProvider>
+                        <CartProvider>
+                            <RouterProvider router={routers}/>
+                            <Checkout />
+                        </CartProvider>
+                    </BookmarkProvider>
+                </AdminProvider>
             </Provider>
         </>
     )
