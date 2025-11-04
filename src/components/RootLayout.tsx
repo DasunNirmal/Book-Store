@@ -6,7 +6,7 @@ import {SidebarContext} from "./SIdebarContext.tsx";
 export const RootLayout = () => {
 
     const {pathname} = useLocation();
-    const showNavigation = pathname !== '';
+    const showNavigation = pathname !== '' && pathname !== '/admin';
     const [open, setOpen] = useState(false)
 
     return (
