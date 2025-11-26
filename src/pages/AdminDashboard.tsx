@@ -55,7 +55,7 @@ export const AdminDashboard = () => {
                             <motion.button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`flex items-center px-6 py-3 rounded-t-lg text-sm font-medium transition-all ${
+                                className={`flex cursor-pointer items-center px-6 py-3 rounded-t-lg text-sm font-medium transition-all ${
                                     activeTab === tab.id
                                         ? 'bg-rose-500 text-white'
                                         : 'text-slate-700 hover:text-rose-500 hover:bg-rose-50'
@@ -71,7 +71,7 @@ export const AdminDashboard = () => {
                         {/* Back to Store Button */}
                         <Link to="/">
                             <motion.button
-                                className="flex items-center px-4 py-3 mr-4 text-slate-700 hover:text-rose-500 transition-colors rounded-t-lg hover:bg-rose-50"
+                                className="flex items-center cursor-pointer px-4 py-3 mr-4 text-slate-700 hover:text-rose-500 transition-colors rounded-t-lg hover:bg-rose-50"
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                             >

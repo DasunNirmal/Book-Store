@@ -56,7 +56,7 @@ export const BookForm = ({ book, onClose }: BookFormProps) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50"
+                className="fixed inset-0 bg-opacity-50 backdrop-blur-sm z-50"
                 onClick={onClose}
             />
 
@@ -77,7 +77,7 @@ export const BookForm = ({ book, onClose }: BookFormProps) => {
                             onClick={onClose}
                             className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
                         >
-                            <XMarkIcon className="w-6 h-6 text-gray-700" />
+                            <XMarkIcon className="w-6 h-6 cursor-pointer text-gray-700" />
                         </button>
                     </div>
 
@@ -188,7 +188,7 @@ export const BookForm = ({ book, onClose }: BookFormProps) => {
                             <motion.button
                                 type="button"
                                 onClick={onClose}
-                                className="px-6 py-3 border-2 border-slate-700 text-slate-700 rounded-full hover:bg-slate-100 transition-colors"
+                                className="px-6 py-3 border-2 border-slate-700 cursor-pointer text-slate-700 rounded-full hover:bg-slate-100 transition-colors"
                                 whileTap={{ scale: 0.95 }}
                             >
                                 Cancel
@@ -196,7 +196,7 @@ export const BookForm = ({ book, onClose }: BookFormProps) => {
 
                             <motion.button
                                 type="submit"
-                                className="px-6 py-3 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition-colors"
+                                className="px-6 py-3 bg-rose-500 text-white rounded-full cursor-pointer hover:bg-rose-600 transition-colors"
                                 whileTap={{ scale: 0.95 }}
                             >
                                 {book ? 'Update Book' : 'Add Book'}

@@ -42,7 +42,7 @@ export const BookManagement = () => {
 
                 <motion.button
                     onClick={() => setIsFormOpen(true)}
-                    className="flex items-center px-6 py-3 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition-colors"
+                    className="flex items-center cursor-pointer px-6 py-3 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition-colors"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                 >
