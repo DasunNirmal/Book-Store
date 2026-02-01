@@ -3,13 +3,30 @@ import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useCart } from "../components/providers/CartProvider.tsx";
 import { TrashIcon, XMarkIcon } from "@heroicons/react/24/solid";
-import { AuthModal } from "../components/AuthModel.tsx"; // Import the AuthModal
+import { AuthModal } from "../components/AuthModel.tsx";
+import dataService from "../services/DataServices.ts"; // Import the AuthModal
 
 export const Checkout = () => {
     const { cartItems, closeCheckout, isCheckoutOpen, removeFromCart } = useCart();
     const [paymentMethod, setPaymentMethod] = useState<string>("card");
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false); // State for auth modal
     const [user, setUser] = useState<any>(null); // State for user data
+    const [formData, setFormData] = useState({
+        email: '',
+        firstName: '',
+        lastName: '',
+        company: '',
+        address: '',
+        city: '',
+        country: '',
+        state: '',
+        postalCode: '',
+        phone: '',
+        cardNumber: '',
+        expiry: '',
+        cvv: '',
+        nameOnCard: ''
+    });
 
     const countries = ["United States", "Canada", "United Kingdom", "Australia"];
     const subtotal = cartItems.reduce(
@@ -44,19 +61,36 @@ export const Checkout = () => {
         processPayment();
     };
 
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
     const processPayment = () => {
-        // Handle the actual payment processing
-        console.log('Processing payment for user:', user);
+        // Create order in DataService
+        const order = dataService.createOrder({
+            userId: user?.id || 'guest',
+            userName: user?.name || 'Guest User',
+            userEmail: user?.email || 'guest@example.com',
+            items: cartItems.map(item => ({
+                bookId: item.id || '',
+                bookTitle: item.title,
+                quantity: item.quantity,
+                price: typeof item.price === 'string' ? parseFloat(item.price.replace('$', '')) : item.price
+            })),
+            shippingAddress: `${formData.address}, ${formData.city}, ${formData.state} ${formData.postalCode}, ${formData.country}`
+        });
 
-        // Here you would:
-        // 1. Validate form data
-        // 2. Create order in backend
-        // 3. Process payment (if card)
-        // 4. Show success message
-        // 5. Clear cart and close checkout
-
-        alert('Payment processed successfully!');
-        closeCheckout();
+        if (order) {
+            alert('Order placed successfully!');
+            // Clear cart here
+            closeCheckout();
+        } else {
+            alert('Some items are out of stock!');
+        }
     };
 
     return (
@@ -105,6 +139,9 @@ export const Checkout = () => {
                                         <h3 className="text-lg font-semibold text-slate-700 mb-4">Contact Information</h3>
                                         <input
                                             type="email"
+                                            name="email"
+                                            value={formData.email}
+                                            onChange={handleInputChange}
                                             placeholder="Email Address"
                                             className="w-full p-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent"
                                         />
@@ -116,27 +153,42 @@ export const Checkout = () => {
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                             <input
                                                 type="text"
+                                                name="firstName"
+                                                value={formData.firstName}
+                                                onChange={handleInputChange}
                                                 placeholder="First Name"
                                                 className="p-3 border border-stone-300 rounded-lg focus:ring-rose-500"
                                             />
                                             <input
                                                 type="text"
+                                                name="lastName"
+                                                value={formData.lastName}
+                                                onChange={handleInputChange}
                                                 placeholder="Last Name"
                                                 className="p-3 border border-stone-300 rounded-lg focus:ring-rose-500"
                                             />
                                         </div>
                                         <input
                                             type="text"
+                                            name="company"
+                                            value={formData.company}
+                                            onChange={handleInputChange}
                                             placeholder="Company (Optional)"
                                             className="w-full p-3 border border-stone-300 rounded-lg mb-4 focus:ring-rose-500"
                                         />
                                         <input
                                             type="text"
+                                            name="address"
+                                            value={formData.address}
+                                            onChange={handleInputChange}
                                             placeholder="Address"
                                             className="w-full p-3 border border-stone-300 rounded-lg mb-4 focus:ring-rose-500"
                                         />
                                         <input
                                             type="text"
+                                            name="city"
+                                            value={formData.city}
+                                            onChange={handleInputChange}
                                             placeholder="City"
                                             className="w-full p-3 border border-stone-300 rounded-lg mb-4 focus:ring-rose-500"
                                         />
@@ -154,17 +206,26 @@ export const Checkout = () => {
                                             </div>
                                             <input
                                                 type="text"
+                                                name="state"
+                                                value={formData.state}
+                                                onChange={handleInputChange}
                                                 placeholder="State / Province"
                                                 className="p-3 border border-stone-300 rounded-lg focus:ring-rose-500"
                                             />
                                             <input
                                                 type="text"
+                                                name="postalCode"
+                                                value={formData.postalCode}
+                                                onChange={handleInputChange}
                                                 placeholder="Postal Code"
                                                 className="p-3 border border-stone-300 rounded-lg focus:ring-rose-500"
                                             />
                                         </div>
                                         <input
                                             type="tel"
+                                            name="phone"
+                                            value={formData.phone}
+                                            onChange={handleInputChange}
                                             placeholder="Phone"
                                             className="w-full p-3 border border-stone-300 rounded-lg focus:ring-rose-500"
                                         />
@@ -199,23 +260,35 @@ export const Checkout = () => {
                                                 <div className="p-4 border border-stone-300 rounded-lg bg-white space-y-3">
                                                     <input
                                                         type="text"
+                                                        name="cardNumber"
+                                                        value={formData.cardNumber}
+                                                        onChange={handleInputChange}
                                                         placeholder="Card Number"
                                                         className="w-full p-3 border border-stone-300 rounded-lg focus:ring-rose-500"
                                                     />
                                                     <div className="grid grid-cols-2 gap-3">
                                                         <input
                                                             type="text"
+                                                            name="expiry"
+                                                            value={formData.expiry}
+                                                            onChange={handleInputChange}
                                                             placeholder="MM/YY"
                                                             className="p-3 border border-stone-300 rounded-lg focus:ring-rose-500"
                                                         />
                                                         <input
                                                             type="text"
+                                                            name="cvv"
+                                                            value={formData.cvv}
+                                                            onChange={handleInputChange}
                                                             placeholder="CVV"
                                                             className="p-3 border border-stone-300 rounded-lg focus:ring-rose-500"
                                                         />
                                                     </div>
                                                     <input
                                                         type="text"
+                                                        name="nameOnCard"
+                                                        value={formData.nameOnCard}
+                                                        onChange={handleInputChange}
                                                         placeholder="Name on Card"
                                                         className="w-full p-3 border border-stone-300 rounded-lg focus:ring-rose-500"
                                                     />

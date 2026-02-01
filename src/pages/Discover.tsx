@@ -4,6 +4,7 @@ import {CheckIcon, MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import {useState} from "react";
 import {BookCard} from "../components/BookCard.tsx";
 import {Footer} from "../components/Footer.tsx";
+import {useBooks} from "../services/UseData.ts";
 
 export const Discover = () => {
 
@@ -11,6 +12,7 @@ export const Discover = () => {
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const { open } = useSidebar();
     const sidebarWidth = open ? 240 : 80;
+    const { books } = useBooks()
 
     const bookCategories = [
         "Fiction",
@@ -100,101 +102,17 @@ export const Discover = () => {
                 <div className="p-8 pt-0">
                     <h2 className="text-2xl font-semibold text-slate-700 mb-6">Featured Books</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10">
-                        {/* Row 1 */}
-                        <BookCard
-                            title="Atomic Habits"
-                            author="James Clear"
-                            price="$11.49"
-                            image="https://images.unsplash.com/photo-1531346878377-a5be20888e57?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                        />
-                        <BookCard
-                            title="The Silent Patient"
-                            author="Alex Michaelides"
-                            price="$12.99"
-                            image="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                        />
-                        <BookCard
-                            title="Educated"
-                            author="Tara Westover"
-                            price="$14.99"
-                            image="https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                        />
-                        <BookCard
-                            title="The Midnight Library"
-                            author="Matt Haig"
-                            price="$10.99"
-                            image="https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                        />
-                        <BookCard
-                            title="Dune"
-                            author="Frank Herbert"
-                            price="$13.99"
-                            image="https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                        />
-
-                        {/* Row 2 */}
-                        <BookCard
-                            title="Project Hail Mary"
-                            author="Andy Weir"
-                            price="$15.49"
-                            image="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                        />
-                        <BookCard
-                            title="Where the Crawdads Sing"
-                            author="Delia Owens"
-                            price="$12.29"
-                            image="https://images.unsplash.com/photo-1531346878377-a5be20888e57?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                        />
-                        <BookCard
-                            title="The Alchemist"
-                            author="Paulo Coelho"
-                            price="$9.99"
-                            image="https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                        />
-                        <BookCard
-                            title="Sapiens"
-                            author="Yuval Noah Harari"
-                            price="$16.99"
-                            image="https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                        />
-                        <BookCard
-                            title="The Psychology of Money"
-                            author="Morgan Housel"
-                            price="$14.49"
-                            image="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                        />
-
-                        {/* Row 3 */}
-                        <BookCard
-                            title="1984"
-                            author="George Orwell"
-                            price="$8.99"
-                            image="https://images.unsplash.com/photo-1531346878377-a5be20888e57?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                        />
-                        <BookCard
-                            title="The Great Gatsby"
-                            author="F. Scott Fitzgerald"
-                            price="$7.99"
-                            image="https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                        />
-                        <BookCard
-                            title="To Kill a Mockingbird"
-                            author="Harper Lee"
-                            price="$10.49"
-                            image="https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                        />
-                        <BookCard
-                            title="The Hobbit"
-                            author="J.R.R. Tolkien"
-                            price="$11.99"
-                            image="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                        />
-                        <BookCard
-                            title="Pride and Prejudice"
-                            author="Jane Austen"
-                            price="$6.99"
-                            image="https://images.unsplash.com/photo-1531346878377-a5be20888e57?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                        />
+                        {books.map((book) => (
+                            <BookCard
+                                key={book.id}
+                                id={book.id}
+                                title={book.title}
+                                author={book.author}
+                                price={`$${book.price}`}
+                                image={book.image}
+                                description={book.description}
+                            />
+                        ))}
                     </div>
                 </div>
 
