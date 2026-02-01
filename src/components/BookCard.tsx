@@ -6,6 +6,7 @@ import {useBookmark} from "./providers/BookMarkProvider.tsx";
 import {useCart} from "./providers/CartProvider.tsx";
 
 interface BookCardProps {
+    id?: string;
     title: string;
     author: string;
     price: string | number;
@@ -13,13 +14,12 @@ interface BookCardProps {
     description?: string; // Add description for the modal
 }
 
-export const BookCard = ({ title, author, price, image, description = "This book explores fascinating concepts..." }: BookCardProps) => {
+export const BookCard = ({ id, title, author, price, image, description = "This book explores fascinating concepts..." }: BookCardProps) => {
 
     const [isViewOpen, setIsViewOpen] = useState(false);
     const { addBookmark, removeBookmark, isBookmarked } = useBookmark();
     const isBooked = isBookmarked(title);
-    const { addToCart } = useCart();
-    const { buyNow } = useCart();
+    const { addToCart, buyNow } = useCart();
 
     const handleBookmark = () => {
         if (isBooked) {
@@ -27,6 +27,15 @@ export const BookCard = ({ title, author, price, image, description = "This book
         } else {
             addBookmark({ title, author, price, image, description });
         }
+    };
+
+    // Just pass the book data, CartProvider handles stock checking
+    const handleAddToCart = () => {
+        addToCart({ id, title, author, price, image, description });
+    };
+
+    const handleBuyNow = () => {
+        buyNow({ id, title, author, price, image, description });
     };
 
     return (
@@ -54,7 +63,7 @@ export const BookCard = ({ title, author, price, image, description = "This book
                                 }}
                                 whileTap={{ scale: 0.95 }}
                                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                                onClick={() => addToCart({ title, author, price, image, description })}
+                                onClick={handleAddToCart}
                             >
                                 Add to Cart
                             </motion.button>
@@ -158,11 +167,7 @@ export const BookCard = ({ title, author, price, image, description = "This book
                                             <motion.button
                                                 className="px-8 py-3 rounded-full border-2 cursor-pointer border-rose-700 text-slate-700 hover:bg-rose-500 hover:font-bold hover:text-white transition-colors"
                                                 whileTap={{ scale: 0.95 }}
-                                                /*onClick={() => {
-                                                    addToCart({ title, author, price, image, description });
-                                                    openCheckout();
-                                                }}*/
-                                                onClick={() => buyNow({ title, author, price, image, description })}
+                                                onClick={handleBuyNow}
                                             >
                                                 Buy Now
                                             </motion.button>
