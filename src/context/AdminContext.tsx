@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import dataService, {Order, User} from "../services/DataServices";
 
 export interface Book {
     id: string;
@@ -9,25 +10,7 @@ export interface Book {
     description: string;
     category: string;
     stock: number;
-    createdAt: string;
-}
-
-export interface User {
-    id: string;
-    name: string;
-    email: string;
-    role: 'user' | 'admin';
-    createdAt: string;
-}
-
-export interface Order {
-    id: string;
-    userId: string;
-    userName: string;
-    books: { bookId: string; title: string; quantity: number; price: number }[];
-    total: number;
-    status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
-    createdAt: string;
+    createdAt?: string;
 }
 
 interface AdminContextType {
@@ -46,78 +29,86 @@ interface AdminContextType {
 const AdminContext = createContext<AdminContextType>({} as AdminContextType);
 
 export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
-    const [books, setBooks] = useState<Book[]>(() => {
-        const saved = localStorage.getItem('admin-books');
-        return saved ? JSON.parse(saved) : [];
-    });
-
+    // Use DataService instead of separate localStorage
+    const [books, setBooks] = useState<Book[]>(() => dataService.getBooks());
     const [users, setUsers] = useState<User[]>(() => {
-        const saved = localStorage.getItem('admin-users');
-        return saved ? JSON.parse(saved) : [
-            {
-                id: '1',
+        const existingUsers = dataService.getUsers();
+        // Add default admin if no users exist
+        if (existingUsers.length === 0) {
+            const adminUser = {
                 name: 'Admin User',
                 email: 'admin@bookhaven.com',
                 role: 'admin' as const,
-                createdAt: new Date().toISOString()
-            }
-        ];
+                phone: '',
+                address: ''
+            };
+            return [dataService.addUser(adminUser)];
+        }
+        return existingUsers;
     });
+    const [orders, setOrders] = useState<Order[]>(() => dataService.getOrders());
 
-    const [orders, setOrders] = useState<Order[]>(() => {
-        const saved = localStorage.getItem('admin-orders');
-        return saved ? JSON.parse(saved) : [];
-    });
-
+    // Listen for real-time updates from DataService
     useEffect(() => {
-        localStorage.setItem('admin-books', JSON.stringify(books));
-    }, [books]);
+        const handleBooksUpdate = (event: Event) => {
+            const customEvent = event as CustomEvent;
+            setBooks(customEvent.detail);
+        };
+        const handleUsersUpdate = (event: Event) => {
+            const customEvent = event as CustomEvent;
+            setUsers(customEvent.detail);
+        };
+        const handleOrdersUpdate = (event: Event) => {
+            const customEvent = event as CustomEvent;
+            setOrders(customEvent.detail);
+        };
 
-    useEffect(() => {
-        localStorage.setItem('admin-users', JSON.stringify(users));
-    }, [users]);
+        window.addEventListener('booksUpdated', handleBooksUpdate);
+        window.addEventListener('usersUpdated', handleUsersUpdate);
+        window.addEventListener('ordersUpdated', handleOrdersUpdate);
 
-    useEffect(() => {
-        localStorage.setItem('admin-orders', JSON.stringify(orders));
-    }, [orders]);
+        return () => {
+            window.removeEventListener('booksUpdated', handleBooksUpdate);
+            window.removeEventListener('usersUpdated', handleUsersUpdate);
+            window.removeEventListener('ordersUpdated', handleOrdersUpdate);
+        };
+    }, []);
 
     const addBook = (bookData: Omit<Book, 'id' | 'createdAt'>) => {
-        const newBook: Book = {
-            ...bookData,
-            id: Date.now().toString(),
-            createdAt: new Date().toISOString()
-        };
-        setBooks(prev => [...prev, newBook]);
+        dataService.addBook(bookData);
+        // State will be updated via the event listener
     };
 
     const updateBook = (id: string, bookData: Partial<Book>) => {
-        setBooks(prev => prev.map(book =>
-            book.id === id ? { ...book, ...bookData } : book
-        ));
+        dataService.updateBook(id, bookData);
+        // State will be updated via the event listener
     };
 
     const deleteBook = (id: string) => {
-        setBooks(prev => prev.filter(book => book.id !== id));
+        dataService.deleteBook(id);
+        // State will be updated via the event listener
     };
 
     const updateUser = (id: string, userData: Partial<User>) => {
-        setUsers(prev => prev.map(user =>
-            user.id === id ? { ...user, ...userData } : user
-        ));
+        dataService.updateUser(id, userData);
+        // State will be updated via the event listener
     };
 
     const deleteUser = (id: string) => {
-        setUsers(prev => prev.filter(user => user.id !== id));
+        dataService.deleteUser(id);
+        // State will be updated via the event listener
     };
 
     const updateOrder = (id: string, orderData: Partial<Order>) => {
-        setOrders(prev => prev.map(order =>
-            order.id === id ? { ...order, ...orderData } : order
-        ));
+        if (orderData.status) {
+            dataService.updateOrderStatus(id, orderData.status);
+        }
+        // State will be updated via the event listener
     };
 
     const deleteOrder = (id: string) => {
-        setOrders(prev => prev.filter(order => order.id !== id));
+        dataService.deleteOrder(id);
+        // State will be updated via the event listener
     };
 
     return (
