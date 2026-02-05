@@ -9,6 +9,7 @@ export interface Book {
     description: string;
     category: string;
     stock: number;
+    createdAt?: string;
 }
 
 export interface User {
@@ -127,9 +128,12 @@ class DataService {
     }
 
     saveBooks(books: Book[]): void {
+        console.log('🔥 DataService.saveBooks called with:', books.length, 'books');
         localStorage.setItem(STORAGE_KEYS.BOOKS, JSON.stringify(books));
         // Trigger custom event for real-time updates
-        window.dispatchEvent(new CustomEvent('booksUpdated', { detail: books }));
+        const event = new CustomEvent('booksUpdated', { detail: books });
+        console.log('🚀 Dispatching booksUpdated event:', event);
+        window.dispatchEvent(event);
     }
 
     addBook(book: Omit<Book, 'id'>): Book {

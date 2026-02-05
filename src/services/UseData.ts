@@ -1,6 +1,3 @@
-// src/hooks/useData.ts
-// React hooks for real-time data updates
-
 import { useState, useEffect } from 'react';
 import dataService, { Book, User, Order } from '../services/DataServices.ts';
 
@@ -10,11 +7,14 @@ export function useBooks() {
 
     useEffect(() => {
         const handleUpdate = (event: CustomEvent) => {
+            console.log('🎯 UseData hook received booksUpdated event:', event.detail);
             setBooks(event.detail);
         };
 
+        console.log('👂 UseData hook setting up booksUpdated listener');
         window.addEventListener('booksUpdated', handleUpdate as EventListener);
         return () => {
+            console.log('🔇 UseData hook removing booksUpdated listener');
             window.removeEventListener('booksUpdated', handleUpdate as EventListener);
         };
     }, []);

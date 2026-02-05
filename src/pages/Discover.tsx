@@ -1,10 +1,12 @@
 import {motion} from "framer-motion";
 import {useSidebar} from "../components/SIdebarContext.tsx";
 import {CheckIcon, MagnifyingGlassIcon} from "@heroicons/react/24/outline";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {BookCard} from "../components/BookCard.tsx";
 import {Footer} from "../components/Footer.tsx";
-import {useBooks} from "../services/UseData.ts";
+// import {useBooks} from "../services/UseData.ts";
+// import dataService from "../services/DataServices.ts";
+import {useAdmin} from "../context/AdminContext";
 
 export const Discover = () => {
 
@@ -12,7 +14,8 @@ export const Discover = () => {
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const { open } = useSidebar();
     const sidebarWidth = open ? 240 : 80;
-    const { books } = useBooks()
+    // const { books } = useBooks();
+    const { books } = useAdmin();
 
     const bookCategories = [
         "Fiction",
@@ -27,6 +30,24 @@ export const Discover = () => {
         "Technology"
     ];
 
+    useEffect(() => {
+        console.log('🔍 Discover page - Books count:', books.length);
+        console.log('📚 Books:', books);
+    }, [books]);
+
+    // Also add a listener directly to test
+    useEffect(() => {
+        const testListener = (e: Event) => {
+            console.log('🎉 Discover page received booksUpdated event!', (e as CustomEvent).detail);
+        };
+        console.log('👂 Discover page setting up direct booksUpdated listener');
+        window.addEventListener('booksUpdated', testListener);
+        return () => {
+            console.log('🔇 Discover page removing direct booksUpdated listener');
+            window.removeEventListener('booksUpdated', testListener);
+        };
+    }, []);
+
     const toggleCategory = (category: string) => {
         setSelectedCategories(prev =>
             prev.includes(category)
@@ -34,6 +55,10 @@ export const Discover = () => {
                 : [...prev, category]
         );
     };
+
+    const filteredBooks = selectedCategories.length > 0
+        ? books.filter(book => selectedCategories.includes(book.category))
+        : books;
 
     return (
         <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}>
@@ -114,6 +139,11 @@ export const Discover = () => {
                             />
                         ))}
                     </div>
+                    {filteredBooks.length === 0 && (
+                        <div className="text-center py-12">
+                            <p className="text-xl text-stone-600">No books found in selected categories</p>
+                        </div>
+                    )}
                 </div>
 
                 {/* Footer section */}

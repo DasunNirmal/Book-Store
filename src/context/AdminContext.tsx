@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import dataService, {Order, User} from "../services/DataServices";
+import dataService, {Book, Order, User} from "../services/DataServices";
 
-export interface Book {
+/*export interface Book {
     id: string;
     title: string;
     author: string;
@@ -11,7 +11,7 @@ export interface Book {
     category: string;
     stock: number;
     createdAt?: string;
-}
+}*/
 
 interface AdminContextType {
     books: Book[];

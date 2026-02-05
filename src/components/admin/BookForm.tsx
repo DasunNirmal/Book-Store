@@ -34,11 +34,24 @@ export const BookForm = ({ book, onClose }: BookFormProps) => {
         }
     }, [book]);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    /*const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (book) {
             updateBook(book.id, formData);
         } else {
+            addBook(formData);
+        }
+        onClose();
+    };*/
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        console.log('📝 BookForm - Submitting book:', formData);
+
+        if (book) {
+            console.log('✏️ Updating book:', book.id);
+            updateBook(book.id, formData);
+        } else {
+            console.log('➕ Adding new book');
             addBook(formData);
         }
         onClose();
