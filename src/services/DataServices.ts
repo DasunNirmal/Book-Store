@@ -16,9 +16,11 @@ export interface User {
     id: string;
     name: string;
     email: string;
-    phone: string;
-    address: string;
-    joinedDate: string;
+    phone?: string;
+    address?: string;
+    role: 'user' | 'admin';
+    joinedDate?: string;
+    createdAt: string;
 }
 
 export interface OrderItem {
@@ -32,12 +34,14 @@ export interface Order {
     id: string;
     userId: string;
     userName: string;
-    userEmail: string;
-    items: OrderItem[];
+    userEmail?: string;
+    items?: OrderItem[];
+    books: { bookId: string; title: string; quantity: number; price: number }[];
     total: number;
     status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
-    date: string;
-    shippingAddress: string;
+    date?: string;
+    createdAt: string;
+    shippingAddress?: string;
 }
 
 // Keys for localStorage
@@ -58,7 +62,8 @@ const INITIAL_BOOKS: Book[] = [
         image: 'https://images.unsplash.com/photo-1531346878377-a5be20888e57?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
         description: 'Transform your life with tiny changes that lead to remarkable results.',
         category: 'Self-Help',
-        stock: 45
+        stock: 45,
+        createdAt: new Date().toISOString()
     },
     {
         id: '2',
@@ -68,7 +73,8 @@ const INITIAL_BOOKS: Book[] = [
         image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
         description: 'A gripping psychological thriller about a woman who refuses to speak.',
         category: 'Mystery',
-        stock: 32
+        stock: 32,
+        createdAt: new Date().toISOString()
     },
     {
         id: '3',
@@ -78,7 +84,8 @@ const INITIAL_BOOKS: Book[] = [
         image: 'https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
         description: 'A memoir about a woman who grows up in a survivalist family and eventually escapes.',
         category: 'Biography',
-        stock: 28
+        stock: 28,
+        createdAt: new Date().toISOString()
     },
     {
         id: '4',
@@ -88,7 +95,8 @@ const INITIAL_BOOKS: Book[] = [
         image: 'https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
         description: 'Between life and death exists the Midnight Library.',
         category: 'Fiction',
-        stock: 50
+        stock: 50,
+        createdAt: new Date().toISOString()
     },
     {
         id: '5',
@@ -98,15 +106,19 @@ const INITIAL_BOOKS: Book[] = [
         image: 'https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80',
         description: 'A stunning blend of adventure and mysticism, environmentalism and politics.',
         category: 'Science Fiction',
-        stock: 22
+        stock: 22,
+        createdAt: new Date().toISOString()
     },
 ];
 
 class DataService {
-    // Initialize storage with sample data if empty
     initialize() {
+        console.log('🚀 DataService initializing...');
         if (!localStorage.getItem(STORAGE_KEYS.BOOKS)) {
+            console.log('📚 No books found, creating initial books');
             this.saveBooks(INITIAL_BOOKS);
+        } else {
+            console.log('📚 Books already exist:', this.getBooks().length);
         }
         if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
             localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify([]));
@@ -128,21 +140,34 @@ class DataService {
     }
 
     saveBooks(books: Book[]): void {
-        console.log('🔥 DataService.saveBooks called with:', books.length, 'books');
+        console.log('💾 DataService - Saving books:', books.length);
         localStorage.setItem(STORAGE_KEYS.BOOKS, JSON.stringify(books));
-        // Trigger custom event for real-time updates
-        const event = new CustomEvent('booksUpdated', { detail: books });
-        console.log('🚀 Dispatching booksUpdated event:', event);
-        window.dispatchEvent(event);
+
+        // Trigger custom event for same-tab real-time updates
+        console.log('📡 DataService - Dispatching booksUpdated event');
+        window.dispatchEvent(new CustomEvent('booksUpdated', { detail: books }));
+        console.log('✅ DataService - Event dispatched');
+
+        // Trigger storage event for cross-tab communication
+        window.dispatchEvent(new StorageEvent('storage', {
+            key: STORAGE_KEYS.BOOKS,
+            newValue: JSON.stringify(books),
+            url: window.location.href,
+            storageArea: localStorage
+        }));
+        console.log('📡 DataService - Storage event dispatched for cross-tab sync');
     }
 
     addBook(book: Omit<Book, 'id'>): Book {
+        console.log('➕ DataService - addBook called with:', book);
         const books = this.getBooks();
         const newBook: Book = {
             ...book,
             id: Date.now().toString(),
+            createdAt: new Date().toISOString()
         };
         books.push(newBook);
+        console.log('📚 DataService - New books array:', books.length);
         this.saveBooks(books);
         return newBook;
     }
@@ -189,12 +214,14 @@ class DataService {
         window.dispatchEvent(new CustomEvent('usersUpdated', { detail: users }));
     }
 
-    addUser(user: Omit<User, 'id' | 'joinedDate'>): User {
+    addUser(user: Omit<User, 'id' | 'joinedDate' | 'createdAt'>): User {
         const users = this.getUsers();
         const newUser: User = {
             ...user,
             id: Date.now().toString(),
             joinedDate: new Date().toISOString().split('T')[0],
+            createdAt: new Date().toISOString(),
+            role: user.role || 'user',
         };
         users.push(newUser);
         this.saveUsers(users);
@@ -252,17 +279,15 @@ class DataService {
         for (const item of orderData.items) {
             const book = this.getBookById(item.bookId);
             if (!book || book.stock < item.quantity) {
-                return null; // Not enough stock
+                return null;
             }
         }
 
-        // Calculate total
         const total = orderData.items.reduce(
             (sum, item) => sum + item.price * item.quantity,
             0
         );
 
-        // Create order
         const orders = this.getOrders();
         const newOrder: Order = {
             id: Date.now().toString(),
@@ -270,13 +295,19 @@ class DataService {
             userName: orderData.userName,
             userEmail: orderData.userEmail,
             items: orderData.items,
+            books: orderData.items.map(item => ({
+                bookId: item.bookId,
+                title: item.bookTitle,
+                quantity: item.quantity,
+                price: item.price
+            })),
             total,
             status: 'pending',
             date: new Date().toISOString().split('T')[0],
+            createdAt: new Date().toISOString(),
             shippingAddress: orderData.shippingAddress,
         };
 
-        // Update stock for each item
         for (const item of orderData.items) {
             this.updateBookStock(item.bookId, item.quantity);
         }
@@ -286,10 +317,7 @@ class DataService {
         return newOrder;
     }
 
-    updateOrderStatus(
-        id: string,
-        status: Order['status']
-    ): Order | null {
+    updateOrderStatus(id: string, status: Order['status']): Order | null {
         const orders = this.getOrders();
         const index = orders.findIndex(order => order.id === id);
         if (index === -1) return null;
@@ -367,7 +395,6 @@ class DataService {
     }
 }
 
-// Create singleton instance
 const dataService = new DataService();
 dataService.initialize();
 

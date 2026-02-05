@@ -52,8 +52,19 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         const handleBooksUpdate = (event: Event) => {
             const customEvent = event as CustomEvent;
+            console.log('📥 AdminContext received booksUpdated event:', customEvent.detail?.length);
             setBooks(customEvent.detail);
         };
+
+        // NEW: Handle storage events for cross-tab updates
+        const handleStorageChange = (event: StorageEvent) => {
+            if (event.key === 'bookstore_books' && event.newValue) {
+                console.log('📥 AdminContext received storage event for books');
+                const books = JSON.parse(event.newValue);
+                setBooks(books);
+            }
+        };
+
         const handleUsersUpdate = (event: Event) => {
             const customEvent = event as CustomEvent;
             setUsers(customEvent.detail);
@@ -64,11 +75,13 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
         };
 
         window.addEventListener('booksUpdated', handleBooksUpdate);
+        window.addEventListener('storage', handleStorageChange); // NEW
         window.addEventListener('usersUpdated', handleUsersUpdate);
         window.addEventListener('ordersUpdated', handleOrdersUpdate);
 
         return () => {
             window.removeEventListener('booksUpdated', handleBooksUpdate);
+            window.removeEventListener('storage', handleStorageChange); // NEW
             window.removeEventListener('usersUpdated', handleUsersUpdate);
             window.removeEventListener('ordersUpdated', handleOrdersUpdate);
         };
