@@ -20,6 +20,7 @@ interface AdminContextType {
     addBook: (book: Omit<Book, 'id' | 'createdAt'>) => void;
     updateBook: (id: string, book: Partial<Book>) => void;
     deleteBook: (id: string) => void;
+    addUser: (user: Omit<User, 'id' | 'joinedDate' | 'createdAt'>) => void;
     updateUser: (id: string, user: Partial<User>) => void;
     deleteUser: (id: string) => void;
     updateOrder: (id: string, order: Partial<Order>) => void;
@@ -57,11 +58,25 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
         };
 
         // NEW: Handle storage events for cross-tab updates
-        const handleStorageChange = (event: StorageEvent) => {
+        /*const handleStorageChange = (event: StorageEvent) => {
             if (event.key === 'bookstore_books' && event.newValue) {
                 console.log('📥 AdminContext received storage event for books');
                 const books = JSON.parse(event.newValue);
                 setBooks(books);
+            }
+        };*/
+        // Cross-tab sync (native storage event fires in OTHER tabs)
+        const handleStorageChange = (event: StorageEvent) => {
+            if (!event.newValue) return;
+
+            if (event.key === 'bookstore_books') {
+                setBooks(JSON.parse(event.newValue));
+            }
+            if (event.key === 'bookstore_users') {          // <-- new
+                setUsers(JSON.parse(event.newValue));
+            }
+            if (event.key === 'bookstore_orders') {         // <-- optional, same idea
+                setOrders(JSON.parse(event.newValue));
             }
         };
 
@@ -102,6 +117,11 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
         // State will be updated via the event listener
     };
 
+    const addUser = (userData: Omit<User, 'id' | 'joinedDate' | 'createdAt'>) => {
+        dataService.addUser(userData);
+        // State updates via the usersUpdated listener
+    };
+
     const updateUser = (id: string, userData: Partial<User>) => {
         dataService.updateUser(id, userData);
         // State will be updated via the event listener
@@ -128,7 +148,7 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
         <AdminContext.Provider value={{
             books, users, orders,
             addBook, updateBook, deleteBook,
-            updateUser, deleteUser,
+            addUser, updateUser, deleteUser,
             updateOrder, deleteOrder
         }}>
             {children}
