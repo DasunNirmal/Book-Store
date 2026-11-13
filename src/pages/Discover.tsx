@@ -4,8 +4,6 @@ import {CheckIcon, MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import {useEffect, useState} from "react";
 import {BookCard} from "../components/BookCard.tsx";
 import {Footer} from "../components/Footer.tsx";
-// import {useBooks} from "../services/UseData.ts";
-// import dataService from "../services/DataServices.ts";
 import {useAdmin} from "../context/AdminContext";
 
 export const Discover = () => {
@@ -14,7 +12,6 @@ export const Discover = () => {
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const { open } = useSidebar();
     const sidebarWidth = open ? 240 : 80;
-    // const { books } = useBooks();
     const { books } = useAdmin();
 
     const bookCategories = [
