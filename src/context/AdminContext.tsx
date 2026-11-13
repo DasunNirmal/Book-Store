@@ -57,14 +57,6 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
             setBooks(customEvent.detail);
         };
 
-        // NEW: Handle storage events for cross-tab updates
-        /*const handleStorageChange = (event: StorageEvent) => {
-            if (event.key === 'bookstore_books' && event.newValue) {
-                console.log('📥 AdminContext received storage event for books');
-                const books = JSON.parse(event.newValue);
-                setBooks(books);
-            }
-        };*/
         // Cross-tab sync (native storage event fires in OTHER tabs)
         const handleStorageChange = (event: StorageEvent) => {
             if (!event.newValue) return;
