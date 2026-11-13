@@ -5,12 +5,16 @@ import {
     MagnifyingGlassIcon,
     PencilIcon,
     TrashIcon,
-    UserIcon
+    UserIcon,
+    PlusIcon
 } from "@heroicons/react/24/outline";
+import { UserForm } from "./UserForm";
 
 export const UserManagement = () => {
     const { users, updateUser, deleteUser } = useAdmin();
     const [searchTerm, setSearchTerm] = useState("");
+    const [isFormOpen, setIsFormOpen] = useState(false);
+    const [editingUser, setEditingUser] = useState<any>(null);
 
     const filteredUsers = users.filter(user =>
         user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -21,12 +25,34 @@ export const UserManagement = () => {
         updateUser(userId, { role: newRole });
     };
 
+    const handleEdit = (user: any) => {
+        setEditingUser(user);
+        setIsFormOpen(true);
+    };
+
+    const handleCloseForm = () => {
+        setIsFormOpen(false);
+        setEditingUser(null);
+    };
+
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div>
-                <h2 className="text-2xl font-bold text-slate-800">User Management</h2>
-                <p className="text-stone-600">Manage user accounts and permissions</p>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 className="text-2xl font-bold text-slate-800">User Management</h2>
+                    <p className="text-stone-600">Manage user accounts and permissions</p>
+                </div>
+
+                <motion.button
+                    onClick={() => setIsFormOpen(true)}
+                    className="flex items-center cursor-pointer px-6 py-3 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition-colors"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                >
+                    <PlusIcon className="w-5 h-5 mr-2" />
+                    Add New User
+                </motion.button>
             </div>
 
             {/* Search Bar */}
@@ -49,6 +75,7 @@ export const UserManagement = () => {
                         <tr>
                             <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">User</th>
                             <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Email</th>
+                            <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Phone</th>
                             <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Role</th>
                             <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Joined</th>
                             <th className="px-6 py-4 text-left text-sm font-semibold text-slate-700">Actions</th>
@@ -76,6 +103,7 @@ export const UserManagement = () => {
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 text-sm text-stone-600">{user.email}</td>
+                                    <td className="px-6 py-4 text-sm text-stone-600">{user.phone || '—'}</td>
                                     <td className="px-6 py-4">
                                         <select
                                             value={user.role}
@@ -96,8 +124,8 @@ export const UserManagement = () => {
                                     <td className="px-6 py-4">
                                         <div className="flex space-x-2">
                                             <motion.button
-                                                onClick={() => {/* Edit functionality */}}
-                                                className="p-2 rounded-full border-2 border-slate-700 text-slate-700 hover:bg-slate-100"
+                                                onClick={() => handleEdit(user)}
+                                                className="p-2 rounded-full border-2 border-slate-700 text-slate-700 hover:bg-slate-100 cursor-pointer"
                                                 whileHover={{ scale: 1.1 }}
                                                 whileTap={{ scale: 0.9 }}
                                             >
@@ -106,11 +134,11 @@ export const UserManagement = () => {
 
                                             <motion.button
                                                 onClick={() => deleteUser(user.id)}
-                                                disabled={user.role === 'admin'} // Prevent deleting admin
+                                                disabled={user.role === 'admin'}
                                                 className={`p-2 rounded-full ${
                                                     user.role === 'admin'
                                                         ? 'bg-gray-300 cursor-not-allowed'
-                                                        : 'bg-rose-500 hover:bg-rose-700'
+                                                        : 'bg-rose-500 hover:bg-rose-700 cursor-pointer'
                                                 } text-white`}
                                                 whileHover={{ scale: user.role !== 'admin' ? 1.1 : 1 }}
                                                 whileTap={{ scale: user.role !== 'admin' ? 0.9 : 1 }}
@@ -130,10 +158,20 @@ export const UserManagement = () => {
                 {filteredUsers.length === 0 && (
                     <div className="text-center py-12">
                         <p className="text-xl text-gray-500">No users found</p>
-                        <p className="text-gray-400">No users match your search criteria</p>
+                        <p className="text-gray-400">Click "Add New User" to create one</p>
                     </div>
                 )}
             </div>
+
+            {/* User Form Modal */}
+            <AnimatePresence>
+                {isFormOpen && (
+                    <UserForm
+                        user={editingUser}
+                        onClose={handleCloseForm}
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 };
