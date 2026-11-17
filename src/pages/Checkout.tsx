@@ -3,14 +3,13 @@ import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useCart } from "../components/providers/CartProvider.tsx";
 import { TrashIcon, XMarkIcon } from "@heroicons/react/24/solid";
-import { AuthModal } from "../components/AuthModel.tsx";
-import dataService from "../services/DataServices.ts"; // Import the AuthModal
+import dataService, {User} from "../services/DataServices.ts";
+import {useAuth} from "../context/AuthContext.tsx"; // Import the AuthModal
 
 export const Checkout = () => {
-    const { cartItems, closeCheckout, isCheckoutOpen, removeFromCart } = useCart();
+    const { cartItems, closeCheckout, isCheckoutOpen, removeFromCart, clearCart } = useCart();
+    const { currentUser, openAuthModal } = useAuth();
     const [paymentMethod, setPaymentMethod] = useState<string>("card");
-    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false); // State for auth modal
-    const [user, setUser] = useState<any>(null); // State for user data
     const [formData, setFormData] = useState({
         email: '',
         firstName: '',
@@ -36,29 +35,14 @@ export const Checkout = () => {
     const shipping = 5.99;
     const total = subtotal + shipping;
 
-    // Check if user is logged in on component mount
-    useState(() => {
-        const userData = localStorage.getItem('user');
-        if (userData) {
-            setUser(JSON.parse(userData));
-        }
-    });
-
     const handlePayment = () => {
-        if (!user) {
-            // Show auth modal if user is not logged in
-            setIsAuthModalOpen(true);
+        if (!currentUser) {
+            // After signing in, continue with the payment automatically
+            openAuthModal((signedInUser) => processPayment(signedInUser));
         } else {
             // User is logged in, proceed with payment
-            processPayment();
+            processPayment(currentUser);
         }
-    };
-
-    const handleAuthSuccess = (userData: any) => {
-        setUser(userData);
-        setIsAuthModalOpen(false);
-        // Continue with payment after successful authentication
-        processPayment();
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -69,12 +53,11 @@ export const Checkout = () => {
         }));
     };
 
-    const processPayment = () => {
-        // Create order in DataService
+    const processPayment = (buyer: User) => {
         const order = dataService.createOrder({
-            userId: user?.id || 'guest',
-            userName: user?.name || 'Guest User',
-            userEmail: user?.email || 'guest@example.com',
+            userId: buyer.id,
+            userName: buyer.name,
+            userEmail: buyer.email,
             items: cartItems.map(item => ({
                 bookId: item.id || '',
                 bookTitle: item.title,
@@ -86,7 +69,7 @@ export const Checkout = () => {
 
         if (order) {
             alert('Order placed successfully!');
-            // Clear cart here
+            clearCart();
             closeCheckout();
         } else {
             alert('Some items are out of stock!');
@@ -362,10 +345,10 @@ export const Checkout = () => {
                                         </div>
 
                                         {/* User Status Indicator */}
-                                        {user && (
+                                        {currentUser && (
                                             <div className="mb-4 p-3 bg-green-100 border border-green-300 rounded-lg">
                                                 <p className="text-sm text-green-800">
-                                                    ✅ Signed in as <strong>{user.name}</strong>
+                                                    ✅ Signed in as <strong>{currentUser.name}</strong>
                                                 </p>
                                             </div>
                                         )}
@@ -381,7 +364,7 @@ export const Checkout = () => {
                                         </motion.button>
 
                                         {/* Sign In Prompt for Guest Users */}
-                                        {!user && (
+                                        {!currentUser && (
                                             <p className="text-sm text-stone-600 text-center mt-3">
                                                 You'll need to create an account to complete your purchase
                                             </p>
@@ -393,13 +376,6 @@ export const Checkout = () => {
                     </>
                 )}
             </AnimatePresence>
-
-            {/* Auth Modal */}
-            <AuthModal
-                isOpen={isAuthModalOpen}
-                onClose={() => setIsAuthModalOpen(false)}
-                onSuccess={handleAuthSuccess}
-            />
         </>
     );
 };
