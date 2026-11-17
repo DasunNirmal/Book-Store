@@ -11,10 +11,12 @@ import {motion} from "framer-motion";
 import {Dispatch, SetStateAction, useState} from "react";
 import {Link, useLocation} from "react-router";
 import {SidebarContext} from "./SIdebarContext.tsx";
+import {useAuth} from "../context/AuthContext.tsx";
 
 export const Navigation = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) => {
 
     const [position, setPosition] = useState({top: 0, height: 0, opacity: 0,});
+    const { currentUser, logout, openAuthModal } = useAuth();
 
     const {pathname} = useLocation();
     let subpage = pathname.split("/")?.[1];
@@ -86,13 +88,13 @@ export const Navigation = ({ open, setOpen }: { open: boolean, setOpen: Dispatch
                                     transition={{type: "spring", stiffness: 100, delay: open ? 0.5 : 0.1}}
                                     className={`text - slate - 700 absolute left-[120px] top-[483px] ${!open ? 'pointer-events-none' : ''}`}>User</motion.span>
                             </Link>
-                            <div>
+                            <div onClick={() => currentUser ? logout() : openAuthModal()}>
                                 <Tab setPosition={setPosition}><ArrowLeftStartOnRectangleIcon className='h-8 w-8'/></Tab>
                                 <motion.span
                                     initial={{ x: -20, opacity: 0 }}
                                     animate={{x: open ? 0 : -20, opacity: open ? 1 : 0}}
                                     transition={{type: "spring", stiffness: 100, delay: open ? 0.6 : 0}}
-                                    className={`text - slate - 700 absolute left-[120px] top-[595px] ${!open ? 'pointer-events-none' : ''}`}>Logout</motion.span>
+                                    className={`text - slate - 700 absolute left-[120px] top-[595px] ${!open ? 'pointer-events-none' : ''}`}>{currentUser ? 'Logout' : 'Login'}</motion.span>
                             </div>
                             <Cursor position={position}/>
                         </div>
