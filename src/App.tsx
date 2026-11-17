@@ -13,6 +13,8 @@ import {Checkout} from "./pages/Checkout.tsx";
 import {User} from "./pages/User.tsx";
 import { AdminProvider } from "./context/AdminContext";
 import {AdminDashboard} from "./pages/AdminDashboard.tsx";
+import {AuthProvider} from "./context/AuthContext.tsx";
+import {AuthModal} from "./components/AuthModel.tsx";
 
 function App() {
 
@@ -34,12 +36,15 @@ function App() {
         <>
             <Provider store={store}>
                 <AdminProvider>
-                    <BookmarkProvider>
-                        <CartProvider>
-                            <RouterProvider router={routers}/>
-                            <Checkout />
-                        </CartProvider>
-                    </BookmarkProvider>
+                    <AuthProvider>
+                        <BookmarkProvider>
+                            <CartProvider>
+                                <RouterProvider router={routers}/>
+                                <Checkout />
+                                <AuthModal/>
+                            </CartProvider>
+                        </BookmarkProvider>
+                    </AuthProvider>
                 </AdminProvider>
             </Provider>
         </>
