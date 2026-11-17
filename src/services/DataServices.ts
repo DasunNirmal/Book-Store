@@ -21,6 +21,7 @@ export interface User {
     role: 'user' | 'admin';
     joinedDate?: string;
     createdAt: string;
+    passwordHash?: string;
 }
 
 export interface OrderItem {
