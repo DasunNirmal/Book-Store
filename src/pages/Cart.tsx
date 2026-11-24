@@ -4,6 +4,7 @@ import {useCart} from "../components/providers/CartProvider.tsx";
 import {XMarkIcon} from "@heroicons/react/24/solid";
 import {MinusIcon, PlusIcon} from "@heroicons/react/24/outline";
 import {Footer} from "../components/Footer.tsx";
+import {formatPrice} from "../utils/format.ts";
 
 export const Cart = () => {
 
@@ -12,10 +13,7 @@ export const Cart = () => {
     const { cartItems, removeFromCart, updateQuantity } = useCart();
     const { openCheckout } = useCart();
 
-    const subtotal = cartItems.reduce(
-        (sum, item) => sum + (Number(typeof item.price === 'string' ? item.price.replace('$', '') : item.price) * item.quantity),
-        0
-    );
+    const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
     return (
         <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}>
@@ -59,7 +57,7 @@ export const Cart = () => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="py-4 text-rose-500 font-medium">{item.price}</td>
+                                        <td className="py-4 text-rose-500 font-medium">{formatPrice(item.price)}</td>
                                         <td className="py-4">
                                             <div className="flex items-center">
                                                 <button
@@ -79,7 +77,7 @@ export const Cart = () => {
                                             </div>
                                         </td>
                                         <td className="py-4 text-rose-500 font-medium">
-                                            ${(Number(typeof item.price === 'string' ? item.price.replace('$', '') : item.price) * item.quantity).toFixed(2)}
+                                            {formatPrice(item.price * item.quantity)}
                                         </td>
                                         <td className="py-4">
                                             <button
@@ -101,7 +99,7 @@ export const Cart = () => {
                                 <div className="w-64">
                                     <div className="flex justify-between mb-4">
                                         <span className="text-slate-700">Subtotal:</span>
-                                        <span className="text-rose-500 font-bold">${subtotal.toFixed(2)}</span>
+                                        <span className="text-rose-500 font-bold">{formatPrice(subtotal)}</span>
                                     </div>
                                     <motion.button
                                         whileHover={{ scale: 1.02 }}

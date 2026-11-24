@@ -1,15 +1,24 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useCart } from "../components/providers/CartProvider.tsx";
-import { TrashIcon, XMarkIcon } from "@heroicons/react/24/solid";
-import dataService, {User} from "../services/DataServices.ts";
-import {useAuth} from "../context/AuthContext.tsx"; // Import the AuthModal
+import { CheckIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import dataService, { Order, User } from "../services/DataServices.ts";
+import { useAuth } from "../context/AuthContext.tsx";
+import { useToast } from "../context/ToastContext.tsx";
+import { formatPrice } from "../utils/format.ts";
+
+const SHIPPING_FEE = 5.99;
 
 export const Checkout = () => {
     const { cartItems, closeCheckout, isCheckoutOpen, removeFromCart, clearCart } = useCart();
     const { currentUser, openAuthModal } = useAuth();
-    const [paymentMethod, setPaymentMethod] = useState<string>("card");
+    const { showToast } = useToast();
+    const navigate = useNavigate();
+
+    const [paymentMethod, setPaymentMethod] = useState<'card' | 'cash'>("card");
+    const [placedOrder, setPlacedOrder] = useState<Order | null>(null);
     const [formData, setFormData] = useState({
         email: '',
         firstName: '',
@@ -28,22 +37,22 @@ export const Checkout = () => {
     });
 
     const countries = ["United States", "Canada", "United Kingdom", "Australia"];
-    const subtotal = cartItems.reduce(
-        (sum, item) => sum + (Number(typeof item.price === 'string' ? item.price.replace('$', '') : item.price) * item.quantity),
-        0
-    );
-    const shipping = 5.99;
+    const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const shipping = cartItems.length > 0 ? SHIPPING_FEE : 0;
     const total = subtotal + shipping;
 
-    const handlePayment = () => {
-        if (!currentUser) {
-            // After signing in, continue with the payment automatically
-            openAuthModal((signedInUser) => processPayment(signedInUser));
-        } else {
-            // User is logged in, proceed with payment
-            processPayment(currentUser);
-        }
-    };
+    // Pre-fill the form with the signed-in user's details (never overwrite what they typed)
+    useEffect(() => {
+        if (!currentUser) return;
+        setFormData(prev => ({
+            ...prev,
+            email: prev.email || currentUser.email,
+            firstName: prev.firstName || currentUser.name.split(' ')[0] || '',
+            lastName: prev.lastName || currentUser.name.split(' ').slice(1).join(' '),
+            phone: prev.phone || currentUser.phone || '',
+            address: prev.address || currentUser.address || ''
+        }));
+    }, [currentUser]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -53,7 +62,32 @@ export const Checkout = () => {
         }));
     };
 
+    const handlePayment = () => {
+        if (cartItems.length === 0) {
+            showToast('Your cart is empty', 'error');
+            return;
+        }
+        if (!formData.address.trim() || !formData.city.trim() || !formData.country || !formData.postalCode.trim()) {
+            showToast('Please fill in your address, city, country and postal code', 'error');
+            return;
+        }
+
+        if (!currentUser) {
+            // After signing in, continue with the payment automatically
+            openAuthModal((signedInUser) => processPayment(signedInUser));
+        } else {
+            processPayment(currentUser);
+        }
+    };
+
     const processPayment = (buyer: User) => {
+        const shippingAddress = [
+            formData.address,
+            formData.city,
+            `${formData.state} ${formData.postalCode}`.trim(),
+            formData.country
+        ].filter(part => part && part.trim()).join(', ');
+
         const order = dataService.createOrder({
             userId: buyer.id,
             userName: buyer.name,
@@ -62,18 +96,26 @@ export const Checkout = () => {
                 bookId: item.id || '',
                 bookTitle: item.title,
                 quantity: item.quantity,
-                price: typeof item.price === 'string' ? parseFloat(item.price.replace('$', '')) : item.price
+                price: item.price
             })),
-            shippingAddress: `${formData.address}, ${formData.city}, ${formData.state} ${formData.postalCode}, ${formData.country}`
+            shippingAddress,
+            shipping,
+            paymentMethod
         });
 
         if (order) {
-            alert('Order placed successfully!');
             clearCart();
             closeCheckout();
+            setFormData(prev => ({ ...prev, cardNumber: '', expiry: '', cvv: '', nameOnCard: '' }));
+            setPlacedOrder(order);
         } else {
-            alert('Some items are out of stock!');
+            showToast('Some items are out of stock. Please review your cart.', 'error');
         }
+    };
+
+    const goTo = (path: string) => {
+        setPlacedOrder(null);
+        navigate(path);
     };
 
     return (
@@ -178,6 +220,9 @@ export const Checkout = () => {
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                                             <div className="relative">
                                                 <select
+                                                    name="country"
+                                                    value={formData.country}
+                                                    onChange={handleInputChange}
                                                     className="w-full p-3 border border-stone-300 rounded-lg appearance-none focus:ring-rose-500"
                                                 >
                                                     <option value="">Country</option>
@@ -220,7 +265,7 @@ export const Checkout = () => {
                                         <div className="p-4 border border-stone-300 rounded-lg bg-white">
                                             <div className="flex justify-between items-center">
                                                 <span className="text-slate-700">Standard Shipping</span>
-                                                <span className="font-medium text-rose-500">$5.99</span>
+                                                <span className="font-medium text-rose-500">{formatPrice(SHIPPING_FEE)}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -312,7 +357,7 @@ export const Checkout = () => {
                                                         </div>
                                                     </div>
                                                     <span className="font-medium grid items-center justify-center content-between">
-                                                        ${(Number(typeof item.price === 'string' ? item.price.replace('$', '') : item.price) * item.quantity).toFixed(2)}
+                                                        {formatPrice(item.price * item.quantity)}
                                                         <button
                                                             onClick={() => removeFromCart(item.title)}
                                                             className="p-2 text-rose-500 cursor-pointer hover:text-rose-700"
@@ -328,11 +373,11 @@ export const Checkout = () => {
                                         <div className="space-y-2 mb-4">
                                             <div className="flex justify-between">
                                                 <span className="text-stone-600">Subtotal</span>
-                                                <span>${subtotal.toFixed(2)}</span>
+                                                <span>{formatPrice(subtotal)}</span>
                                             </div>
                                             <div className="flex justify-between">
                                                 <span className="text-stone-600">Shipping</span>
-                                                <span>${shipping.toFixed(2)}</span>
+                                                <span>{formatPrice(shipping)}</span>
                                             </div>
                                         </div>
 
@@ -340,7 +385,7 @@ export const Checkout = () => {
                                         <div className="border-t border-stone-200 pt-3 mb-6">
                                             <div className="flex justify-between font-bold text-lg">
                                                 <span>Total</span>
-                                                <span className="text-rose-500">${total.toFixed(2)}</span>
+                                                <span className="text-rose-500">{formatPrice(total)}</span>
                                             </div>
                                         </div>
 
@@ -370,6 +415,57 @@ export const Checkout = () => {
                                             </p>
                                         )}
                                     </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
+
+            {/* Order placed confirmation */}
+            <AnimatePresence>
+                {placedOrder && (
+                    <>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 bg-opacity-50 backdrop-blur-sm z-[65]"
+                            onClick={() => setPlacedOrder(null)}
+                        />
+
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl z-[65] w-full max-w-md"
+                        >
+                            <div className="p-8 text-center">
+                                <div className="w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <CheckIcon className="w-8 h-8 text-rose-500" />
+                                </div>
+                                <h2 className="text-2xl font-bold text-slate-800 mb-2">Order placed!</h2>
+                                <p className="text-stone-600">
+                                    Thank you! Your order <span className="font-semibold text-slate-800">#{placedOrder.id.slice(-6)}</span> for{' '}
+                                    <span className="font-semibold text-rose-500">{formatPrice(placedOrder.total)}</span> is confirmed.
+                                    You can follow its progress under My Orders in your account.
+                                </p>
+
+                                <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
+                                    <motion.button
+                                        onClick={() => goTo('/discover')}
+                                        className="px-6 py-3 border-2 border-slate-700 cursor-pointer text-slate-700 rounded-full hover:bg-slate-100 transition-colors"
+                                        whileTap={{ scale: 0.95 }}
+                                    >
+                                        Keep Shopping
+                                    </motion.button>
+                                    <motion.button
+                                        onClick={() => goTo('/user')}
+                                        className="px-6 py-3 bg-rose-500 text-white rounded-full cursor-pointer hover:bg-rose-600 transition-colors"
+                                        whileTap={{ scale: 0.95 }}
+                                    >
+                                        View My Orders
+                                    </motion.button>
                                 </div>
                             </div>
                         </motion.div>

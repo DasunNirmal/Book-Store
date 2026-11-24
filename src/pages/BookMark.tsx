@@ -31,6 +31,7 @@ export const BookMark = () => {
                             {bookmarks.map((book) => (
                                 <BookmarkCard
                                     key={book.title}
+                                    id={book.id}
                                     title={book.title}
                                     author={book.author}
                                     price={book.price}

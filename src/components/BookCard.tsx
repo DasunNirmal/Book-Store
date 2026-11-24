@@ -1,15 +1,17 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { BookmarkIcon } from "@heroicons/react/24/outline";
+import { BookmarkIcon as BookmarkSolidIcon } from "@heroicons/react/24/solid";
 import { EyeIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import {useBookmark} from "./providers/BookMarkProvider.tsx";
 import {useCart} from "./providers/CartProvider.tsx";
+import {formatPrice} from "../utils/format.ts";
 
 interface BookCardProps {
     id?: string;
     title: string;
     author: string;
-    price: string | number;
+    price: number;
     image: string;
     description?: string; // Add description for the modal
 }
@@ -17,16 +19,12 @@ interface BookCardProps {
 export const BookCard = ({ id, title, author, price, image, description = "This book explores fascinating concepts..." }: BookCardProps) => {
 
     const [isViewOpen, setIsViewOpen] = useState(false);
-    const { addBookmark, removeBookmark, isBookmarked } = useBookmark();
+    const { toggleBookmark, isBookmarked } = useBookmark();
     const isBooked = isBookmarked(title);
     const { addToCart, buyNow } = useCart();
 
     const handleBookmark = () => {
-        if (isBooked) {
-            removeBookmark(title);
-        } else {
-            addBookmark({ title, author, price, image, description });
-        }
+        toggleBookmark({ id, title, author, price, image, description });
     };
 
     // Just pass the book data, CartProvider handles stock checking
@@ -43,12 +41,13 @@ export const BookCard = ({ id, title, author, price, image, description = "This 
             {/* Book Card */}
             <div className="relative w-full h-[430px] bg-white rounded-xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
                 <div
-                    className={`h-[250px] bg-[url('${image}')] bg-cover bg-center transition-transform duration-500 group-hover:scale-110`}
+                    className="h-[250px] bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                    style={{ backgroundImage: `url('${image}')` }}
                 ></div>
                 <div className="p-4">
                     <h3 className="font-semibold text-lg text-slate-800 truncate">{title}</h3>
                     <p className="text-sm text-stone-600 mt-1">{author}</p>
-                    <span className="font-bold text-rose-500 text-lg mt-2 block">{price}</span>
+                    <span className="font-bold text-rose-500 text-lg mt-2 block">{formatPrice(price)}</span>
 
                     <div className="flex justify-between items-center mt-4">
                         <div className="flex space-x-3">
@@ -94,7 +93,7 @@ export const BookCard = ({ id, title, author, price, image, description = "This 
                                 transition={{ type: "spring", stiffness: 300 }}
                                 onClick={handleBookmark}
                             >
-                                <BookmarkIcon className="w-6 h-6" />
+                                {isBooked ? <BookmarkSolidIcon className="w-6 h-6" /> : <BookmarkIcon className="w-6 h-6" />}
                             </motion.button>
                         </div>
                     </div>
@@ -149,7 +148,7 @@ export const BookCard = ({ id, title, author, price, image, description = "This 
                                     <div className="w-full md:w-2/3">
                                         <h2 className="text-3xl font-bold text-slate-800">{title}</h2>
                                         <p className="text-lg text-rose-500 mt-2">by {author}</p>
-                                        <span className="text-2xl font-bold text-rose-500 block mt-4">{price}</span>
+                                        <span className="text-2xl font-bold text-rose-500 block mt-4">{formatPrice(price)}</span>
 
                                         <div className="mt-6">
                                             <h3 className="text-xl font-semibold text-slate-800 mb-2">Description</h3>
@@ -160,7 +159,7 @@ export const BookCard = ({ id, title, author, price, image, description = "This 
                                             <motion.button
                                                 className="px-8 py-3 rounded-full cursor-pointer bg-slate-700 text-white hover:bg-slate-800 transition-colors"
                                                 whileTap={{ scale: 0.95 }}
-                                                onClick={() => addToCart({ title, author, price, image, description })}
+                                                onClick={handleAddToCart}
                                             >
                                                 Add to Cart
                                             </motion.button>

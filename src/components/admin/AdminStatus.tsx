@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useAdmin } from "../../context/AdminContext";
+import { formatPrice } from "../../utils/format";
 import {
     BookOpenIcon,
     UserGroupIcon,
@@ -37,7 +38,7 @@ export const AdminStats = () => {
         },
         {
             name: 'Total Revenue',
-            value: `$${orders.reduce((sum, order) => sum + order.total, 0).toFixed(2)}`,
+            value: formatPrice(orders.filter(order => order.status !== 'cancelled').reduce((sum, order) => sum + order.total, 0)),
             icon: CurrencyDollarIcon,
             color: 'bg-purple-500',
             change: '+18%',
@@ -99,7 +100,7 @@ export const AdminStats = () => {
                                     <p className="text-xs text-stone-600">{order.userName}</p>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-sm font-bold text-rose-500">${order.total}</p>
+                                    <p className="text-sm font-bold text-rose-500">{formatPrice(order.total)}</p>
                                     <span className={`inline-block px-2 py-1 text-xs rounded-full ${
                                         order.status === 'delivered' ? 'bg-green-100 text-green-800' :
                                             order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
@@ -129,7 +130,7 @@ export const AdminStats = () => {
                                     <p className="text-xs text-stone-600">by {book.author}</p>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-sm font-bold text-rose-500">${book.price}</p>
+                                    <p className="text-sm font-bold text-rose-500">{formatPrice(book.price)}</p>
                                     <span className="inline-block px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">
                     {book.stock} left
                   </span>

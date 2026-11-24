@@ -1,18 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import dataService, {Book, Order, User} from "../services/DataServices";
 
-/*export interface Book {
-    id: string;
-    title: string;
-    author: string;
-    price: number;
-    image: string;
-    description: string;
-    category: string;
-    stock: number;
-    createdAt?: string;
-}*/
-
 interface AdminContextType {
     books: Book[];
     users: User[];
@@ -53,7 +41,6 @@ export const AdminProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         const handleBooksUpdate = (event: Event) => {
             const customEvent = event as CustomEvent;
-            console.log('📥 AdminContext received booksUpdated event:', customEvent.detail?.length);
             setBooks(customEvent.detail);
         };
 

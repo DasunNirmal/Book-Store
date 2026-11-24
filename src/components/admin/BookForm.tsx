@@ -2,9 +2,10 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useAdmin } from "../../context/AdminContext";
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import { Book } from "../../services/DataServices";
 
 interface BookFormProps {
-    book?: any;
+    book?: Book | null;
     onClose: () => void;
 }
 
@@ -45,13 +46,10 @@ export const BookForm = ({ book, onClose }: BookFormProps) => {
     };*/
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('📝 BookForm - Submitting book:', formData);
 
         if (book) {
-            console.log('✏️ Updating book:', book.id);
             updateBook(book.id, formData);
         } else {
-            console.log('➕ Adding new book');
             addBook(formData);
         }
         onClose();

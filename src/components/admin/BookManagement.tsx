@@ -8,12 +8,14 @@ import {
     MagnifyingGlassIcon
 } from "@heroicons/react/24/outline";
 import { BookForm } from "./BookForm";
+import { Book } from "../../services/DataServices";
+import { formatPrice } from "../../utils/format";
 
 export const BookManagement = () => {
     const { books, deleteBook } = useAdmin();
     const [searchTerm, setSearchTerm] = useState("");
     const [isFormOpen, setIsFormOpen] = useState(false);
-    const [editingBook, setEditingBook] = useState<any>(null);
+    const [editingBook, setEditingBook] = useState<Book | null>(null);
 
     const filteredBooks = books.filter(book =>
         book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -21,7 +23,7 @@ export const BookManagement = () => {
         book.category.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const handleEdit = (book: any) => {
+    const handleEdit = (book: Book) => {
         setEditingBook(book);
         setIsFormOpen(true);
     };
@@ -81,7 +83,7 @@ export const BookManagement = () => {
                                 <h3 className="font-bold text-lg text-slate-800 truncate">{book.title}</h3>
                                 <p className="text-sm text-stone-600">by {book.author}</p>
                                 <div className="flex justify-between items-center mt-3">
-                                    <span className="font-bold text-rose-500">${book.price}</span>
+                                    <span className="font-bold text-rose-500">{formatPrice(book.price)}</span>
                                     <span className={`px-2 py-1 rounded-full text-xs ${
                                         book.stock > 10 ? 'bg-green-100 text-green-800' :
                                             book.stock > 0 ? 'bg-yellow-100 text-yellow-800' :

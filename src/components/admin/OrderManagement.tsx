@@ -1,14 +1,19 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useAdmin } from "../../context/AdminContext";
+import { Order } from "../../services/DataServices";
+import { OrderDetailsModal } from "./OrderDetailsModal";
+import { formatPrice } from "../../utils/format";
+import { statusBadgeClass } from "../../utils/orderStatus";
 import {
     MagnifyingGlassIcon,
     EyeIcon
 } from "@heroicons/react/24/outline";
 
 export const OrderManagement = () => {
-    const { orders, updateOrder, deleteOrder } = useAdmin();
+    const { orders, updateOrder } = useAdmin();
     const [searchTerm, setSearchTerm] = useState("");
+    const [viewingOrderId, setViewingOrderId] = useState<string | null>(null);
 
     const filteredOrders = orders.filter(order =>
         order.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -16,18 +21,7 @@ export const OrderManagement = () => {
         order.status.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case 'pending': return 'bg-yellow-100 text-yellow-800';
-            case 'processing': return 'bg-blue-100 text-blue-800';
-            case 'shipped': return 'bg-purple-100 text-purple-800';
-            case 'delivered': return 'bg-green-100 text-green-800';
-            case 'cancelled': return 'bg-red-100 text-red-800';
-            default: return 'bg-gray-100 text-gray-800';
-        }
-    };
-
-    const handleStatusChange = (orderId: string, newStatus: string) => {
+    const handleStatusChange = (orderId: string, newStatus: Order['status']) => {
         updateOrder(orderId, { status: newStatus });
     };
 
@@ -89,13 +83,13 @@ export const OrderManagement = () => {
                                         </div>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <div className="text-sm font-bold text-rose-500">${order.total}</div>
+                                        <div className="text-sm font-bold text-rose-500">{formatPrice(order.total)}</div>
                                     </td>
                                     <td className="px-6 py-4">
                                         <select
                                             value={order.status}
-                                            onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                                            className={`text-sm px-3 py-1 rounded-full border ${getStatusColor(order.status)}`}
+                                            onChange={(e) => handleStatusChange(order.id, e.target.value as Order['status'])}
+                                            className={`text-sm px-3 py-1 rounded-full border ${statusBadgeClass(order.status)}`}
                                         >
                                             <option value="pending">Pending</option>
                                             <option value="processing">Processing</option>
@@ -110,8 +104,8 @@ export const OrderManagement = () => {
                                     <td className="px-6 py-4">
                                         <div className="flex space-x-2">
                                             <motion.button
-                                                onClick={() => {/* View order details */}}
-                                                className="p-2 rounded-full border-2 border-slate-700 text-slate-700 hover:bg-slate-100"
+                                                onClick={() => setViewingOrderId(order.id)}
+                                                className="p-2 rounded-full border-2 border-slate-700 text-slate-700 hover:bg-slate-100 cursor-pointer"
                                                 whileHover={{ scale: 1.1 }}
                                                 whileTap={{ scale: 0.9 }}
                                             >
@@ -134,6 +128,16 @@ export const OrderManagement = () => {
                     </div>
                 )}
             </div>
+
+            {/* Order Details Modal */}
+            <AnimatePresence>
+                {viewingOrderId && (
+                    <OrderDetailsModal
+                        orderId={viewingOrderId}
+                        onClose={() => setViewingOrderId(null)}
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 };

@@ -1,27 +1,28 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import {Book} from "./BookMarkProvider.tsx";
 import dataService from "../../services/DataServices.ts";
+import {useToast} from "../../context/ToastContext.tsx";
+import {toNumber} from "../../utils/format.ts";
 
-interface CartItem extends Book {
-    id?: string;
+export interface CartItem extends Book {
     quantity: number;
 }
 
 interface CartContextType {
     cartItems: CartItem[];
-    addToCart: (book: Book & { id?: string }) => void;
+    addToCart: (book: Book, silent?: boolean) => boolean;
     removeFromCart: (title: string) => void;
     updateQuantity: (title: string, quantity: number) => void;
     isCheckoutOpen: boolean;
     openCheckout: () => void;
     closeCheckout: () => void;
-    buyNow: (book: Book & { id?: string }) => void;
+    buyNow: (book: Book) => void;
     clearCart: () => void;
 }
 
 const CartContext = createContext<CartContextType>({
     cartItems: [],
-    addToCart: () => {},
+    addToCart: () => false,
     removeFromCart: () => {},
     updateQuantity: () => {},
     isCheckoutOpen: false,
@@ -31,12 +32,21 @@ const CartContext = createContext<CartContextType>({
     clearCart: () => {},
 });
 
+// Find the book in the store, even if the cart item has no id (older saved carts)
+const findStoredBook = (book: { id?: string; title: string }) =>
+    book.id
+        ? dataService.getBookById(book.id)
+        : dataService.getBooks().find(b => b.title === book.title);
+
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
+    const { showToast } = useToast();
     const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
     const [cartItems, setCartItems] = useState<CartItem[]>(() => {
         const saved = localStorage.getItem("cart");
-        return saved ? JSON.parse(saved) : [];
+        if (!saved) return [];
+        // Older versions stored prices as strings like "$12.99"
+        return (JSON.parse(saved) as CartItem[]).map(item => ({ ...item, price: toNumber(item.price) }));
     });
 
     const openCheckout = () => setIsCheckoutOpen(true);
@@ -46,35 +56,47 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         localStorage.setItem("cart", JSON.stringify(cartItems));
     }, [cartItems]);
 
-    const addToCart = (book: Book & { id?: string }) => {
-        // If book has an ID, check stock in DataService
-        if (book.id) {
-            const bookInStock = dataService.getBookById(book.id);
-            if (!bookInStock || bookInStock.stock < 1) {
-                alert('Sorry, this book is out of stock!');
-                return;
-            }
+    const addToCart = (book: Book, silent = false): boolean => {
+        const stored = findStoredBook(book);
 
-            // Check if adding one more would exceed stock
-            const existing = cartItems.find(item => item.title === book.title);
-            const currentQuantity = existing ? existing.quantity : 0;
-
-            if (currentQuantity >= bookInStock.stock) {
-                alert(`Sorry, only ${bookInStock.stock} copies available!`);
-                return;
-            }
+        if (!stored) {
+            showToast('Sorry, this book is no longer available', 'error');
+            return false;
         }
+        if (stored.stock < 1) {
+            showToast(`“${stored.title}” is out of stock`, 'error');
+            return false;
+        }
+
+        const existing = cartItems.find(item => item.title === stored.title);
+        const currentQuantity = existing ? existing.quantity : 0;
+        if (currentQuantity >= stored.stock) {
+            showToast(`Only ${stored.stock} ${stored.stock === 1 ? 'copy' : 'copies'} of “${stored.title}” available`, 'error');
+            return false;
+        }
+
         setCartItems(prev => {
-            const existing = prev.find(item => item.title === book.title);
-            if (existing) {
+            const found = prev.find(item => item.title === stored.title);
+            if (found) {
                 return prev.map(item =>
-                    item.title === book.title
-                        ? { ...item, quantity: item.quantity + 1 }
+                    item.title === stored.title
+                        ? { ...item, id: stored.id, price: stored.price, quantity: item.quantity + 1 }
                         : item
                 );
             }
-            return [...prev, { ...book, quantity: 1 }];
+            return [...prev, {
+                id: stored.id,
+                title: stored.title,
+                author: stored.author,
+                price: stored.price,
+                image: stored.image,
+                description: stored.description,
+                quantity: 1
+            }];
         });
+
+        if (!silent) showToast(`“${stored.title}” added to your cart`, 'cart');
+        return true;
     };
 
     const removeFromCart = (title: string) => {
@@ -83,14 +105,11 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
     const updateQuantity = (title: string, quantity: number) => {
         if (quantity < 1) return;
-        // Find the item to check stock
         const item = cartItems.find(i => i.title === title);
-        if (item?.id) {
-            const bookInStock = dataService.getBookById(item.id);
-            if (bookInStock && quantity > bookInStock.stock) {
-                alert(`Sorry, only ${bookInStock.stock} copies available!`);
-                return;
-            }
+        const stored = item ? findStoredBook(item) : undefined;
+        if (stored && quantity > stored.stock) {
+            showToast(`Only ${stored.stock} ${stored.stock === 1 ? 'copy' : 'copies'} of “${stored.title}” available`, 'error');
+            return;
         }
         setCartItems(prev =>
             prev.map(item =>
@@ -100,8 +119,11 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const buyNow = (book: Book) => {
-        addToCart(book); // Add the book to cart
-        openCheckout();  // Open checkout
+        const alreadyInCart = cartItems.some(item => item.title === book.title);
+        // Open checkout if the book is already in the cart, or was just added
+        if (alreadyInCart || addToCart(book, true)) {
+            openCheckout();
+        }
     };
 
     const clearCart = () => {

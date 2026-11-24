@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useSidebar } from "../components/SIdebarContext.tsx";
 import { motion } from "framer-motion";
 import { TrashIcon } from "@heroicons/react/24/solid";
-import { PencilIcon, UserIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, ShieldCheckIcon, UserIcon } from "@heroicons/react/24/outline";
 import { Footer } from "../components/Footer.tsx";
 import { useAuth } from "../context/AuthContext";
 import { ConfirmModal } from "../components/ConfirmModal.tsx";
+import { MyOrders } from "../components/MyOrders.tsx";
+import { Link } from "react-router";
 
 export const User = () => {
     const { open } = useSidebar();
@@ -165,6 +167,33 @@ export const User = () => {
                                     ))}
                                 </div>
                             </div>
+
+                            {/* Order history and tracking */}
+                            <MyOrders userId={currentUser.id} />
+
+                            {/* Admin shortcut */}
+                            {currentUser.role === 'admin' && (
+                                <div className="bg-white rounded-xl shadow-lg p-6 mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center">
+                                            <ShieldCheckIcon className="w-6 h-6 text-rose-500" />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-medium text-slate-700">Admin Dashboard</h3>
+                                            <p className="text-sm text-stone-600">Manage books, users and orders.</p>
+                                        </div>
+                                    </div>
+                                    <Link to="/admin">
+                                        <motion.button
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            className="px-4 py-2 bg-rose-500 text-white cursor-pointer rounded-lg hover:bg-rose-600 transition-colors"
+                                        >
+                                            Open Dashboard
+                                        </motion.button>
+                                    </Link>
+                                </div>
+                            )}
 
                             {/* Danger Zone */}
                             <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-rose-100">

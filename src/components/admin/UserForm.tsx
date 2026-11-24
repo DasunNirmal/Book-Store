@@ -2,9 +2,10 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useAdmin } from "../../context/AdminContext";
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import { User } from "../../services/DataServices";
 
 interface UserFormProps {
-    user?: any;
+    user?: User | null;
     onClose: () => void;
 }
 

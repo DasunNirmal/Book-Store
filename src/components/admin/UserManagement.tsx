@@ -9,12 +9,13 @@ import {
     PlusIcon
 } from "@heroicons/react/24/outline";
 import { UserForm } from "./UserForm";
+import { User } from "../../services/DataServices";
 
 export const UserManagement = () => {
     const { users, updateUser, deleteUser } = useAdmin();
     const [searchTerm, setSearchTerm] = useState("");
     const [isFormOpen, setIsFormOpen] = useState(false);
-    const [editingUser, setEditingUser] = useState<any>(null);
+    const [editingUser, setEditingUser] = useState<User | null>(null);
 
     const filteredUsers = users.filter(user =>
         user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -25,7 +26,7 @@ export const UserManagement = () => {
         updateUser(userId, { role: newRole });
     };
 
-    const handleEdit = (user: any) => {
+    const handleEdit = (user: User) => {
         setEditingUser(user);
         setIsFormOpen(true);
     };

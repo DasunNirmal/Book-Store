@@ -5,16 +5,18 @@ import { EyeIcon } from "@heroicons/react/24/solid";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import {useCart} from "./providers/CartProvider.tsx";
+import {formatPrice} from "../utils/format.ts";
 
 interface BookmarkCardProps {
+    id?: string;
     title: string;
     author: string;
-    price: string | number;
+    price: number;
     image: string;
     description?: string;
 }
 
-export const BookmarkCard = ({ title, author, price, image, description = "No description available" }: BookmarkCardProps) => {
+export const BookmarkCard = ({ id, title, author, price, image, description = "No description available" }: BookmarkCardProps) => {
 
     const { removeBookmark } = useBookmark();
     const [isViewOpen, setIsViewOpen] = useState(false);
@@ -41,7 +43,7 @@ export const BookmarkCard = ({ title, author, price, image, description = "No de
                         <div className="flex-grow">
                             <h3 className="text-xl font-bold text-slate-800">{title}</h3>
                             <p className="text-sm text-stone-600 mt-1">by {author}</p>
-                            <span className="font-bold text-rose-500 text-lg mt-2 block">{price}</span>
+                            <span className="font-bold text-rose-500 text-lg mt-2 block">{formatPrice(price)}</span>
                             <p className="text-gray-600 mt-3 line-clamp-2">{description}</p>
                         </div>
 
@@ -120,7 +122,7 @@ export const BookmarkCard = ({ title, author, price, image, description = "No de
                                     <div className="w-full md:w-2/3">
                                         <h2 className="text-3xl font-bold text-slate-800">{title}</h2>
                                         <p className="text-lg text-rose-500 mt-2">by {author}</p>
-                                        <span className="text-2xl font-bold text-rose-500 block mt-4">{price}</span>
+                                        <span className="text-2xl font-bold text-rose-500 block mt-4">{formatPrice(price)}</span>
 
                                         <div className="mt-6">
                                             <h3 className="text-xl font-semibold text-slate-800 mb-2">Description</h3>
@@ -131,14 +133,14 @@ export const BookmarkCard = ({ title, author, price, image, description = "No de
                                             <motion.button
                                                 className="px-8 py-3 rounded-full cursor-pointer bg-slate-700 text-white hover:bg-slate-800 transition-colors"
                                                 whileTap={{ scale: 0.95 }}
-                                                onClick={() => addToCart({ title, author, price, image, description })}
+                                                onClick={() => addToCart({ id, title, author, price, image, description })}
                                             >
                                                 Add to Cart
                                             </motion.button>
                                             <motion.button
                                                 className="px-8 py-3 rounded-full border-2 cursor-pointer border-rose-700 text-slate-700 hover:bg-rose-500 hover:font-bold hover:text-white transition-colors"
                                                 whileTap={{ scale: 0.95 }}
-                                                onClick={() => buyNow({ title, author, price, image, description })}
+                                                onClick={() => buyNow({ id, title, author, price, image, description })}
                                             >
                                                 Buy Now
                                             </motion.button>

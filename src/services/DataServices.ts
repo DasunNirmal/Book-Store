@@ -43,6 +43,8 @@ export interface Order {
     date?: string;
     createdAt: string;
     shippingAddress?: string;
+    shipping?: number;
+    paymentMethod?: 'card' | 'cash';
 }
 
 // Keys for localStorage
@@ -114,12 +116,13 @@ const INITIAL_BOOKS: Book[] = [
 
 class DataService {
     initialize() {
-        console.log('🚀 DataService initializing...');
+        // Remove keys from older versions of the app
+        ['admin-books', 'admin-users', 'admin-orders', 'user', 'token'].forEach(key =>
+            localStorage.removeItem(key)
+        );
+
         if (!localStorage.getItem(STORAGE_KEYS.BOOKS)) {
-            console.log('📚 No books found, creating initial books');
             this.saveBooks(INITIAL_BOOKS);
-        } else {
-            console.log('📚 Books already exist:', this.getBooks().length);
         }
         if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
             localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify([]));
@@ -141,26 +144,13 @@ class DataService {
     }
 
     saveBooks(books: Book[]): void {
-        console.log('💾 DataService - Saving books:', books.length);
         localStorage.setItem(STORAGE_KEYS.BOOKS, JSON.stringify(books));
 
-        // Trigger custom event for same-tab real-time updates
-        console.log('📡 DataService - Dispatching booksUpdated event');
+        // Same-tab updates use this event; other tabs get the browser's native 'storage' event
         window.dispatchEvent(new CustomEvent('booksUpdated', { detail: books }));
-        console.log('✅ DataService - Event dispatched');
-
-        // Trigger storage event for cross-tab communication
-        window.dispatchEvent(new StorageEvent('storage', {
-            key: STORAGE_KEYS.BOOKS,
-            newValue: JSON.stringify(books),
-            url: window.location.href,
-            storageArea: localStorage
-        }));
-        console.log('📡 DataService - Storage event dispatched for cross-tab sync');
     }
 
     addBook(book: Omit<Book, 'id'>): Book {
-        console.log('➕ DataService - addBook called with:', book);
         const books = this.getBooks();
         const newBook: Book = {
             ...book,
@@ -168,7 +158,6 @@ class DataService {
             createdAt: new Date().toISOString()
         };
         books.push(newBook);
-        console.log('📚 DataService - New books array:', books.length);
         this.saveBooks(books);
         return newBook;
     }
@@ -275,19 +264,29 @@ class DataService {
         userEmail: string;
         items: OrderItem[];
         shippingAddress: string;
+        shipping?: number;
+        paymentMethod?: 'card' | 'cash';
     }): Order | null {
-        // Validate stock availability
+        if (orderData.items.length === 0) return null;
+
+        // Validate stock and use the stored price (never trust the price sent by the client)
+        const pricedItems: OrderItem[] = [];
         for (const item of orderData.items) {
             const book = this.getBookById(item.bookId);
             if (!book || book.stock < item.quantity) {
                 return null;
             }
+            pricedItems.push({
+                bookId: book.id,
+                bookTitle: book.title,
+                quantity: item.quantity,
+                price: book.price
+            });
         }
 
-        const total = orderData.items.reduce(
-            (sum, item) => sum + item.price * item.quantity,
-            0
-        );
+        const subtotal = pricedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        const shipping = orderData.shipping ?? 0;
+        const total = Math.round((subtotal + shipping) * 100) / 100;
 
         const orders = this.getOrders();
         const newOrder: Order = {
@@ -295,21 +294,23 @@ class DataService {
             userId: orderData.userId,
             userName: orderData.userName,
             userEmail: orderData.userEmail,
-            items: orderData.items,
-            books: orderData.items.map(item => ({
+            items: pricedItems,
+            books: pricedItems.map(item => ({
                 bookId: item.bookId,
                 title: item.bookTitle,
                 quantity: item.quantity,
                 price: item.price
             })),
             total,
+            shipping,
+            paymentMethod: orderData.paymentMethod,
             status: 'pending',
             date: new Date().toISOString().split('T')[0],
             createdAt: new Date().toISOString(),
             shippingAddress: orderData.shippingAddress,
         };
 
-        for (const item of orderData.items) {
+        for (const item of pricedItems) {
             this.updateBookStock(item.bookId, item.quantity);
         }
 
