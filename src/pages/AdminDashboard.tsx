@@ -96,7 +96,7 @@ const AdminPanel = () => {
     );
 };
 
-// Only signed-in admins can see the dashboard
+// Only signed-in admins can see the dashboard and must be a admin
 export const AdminDashboard = () => {
     const { currentUser, openAuthModal } = useAuth();
 
