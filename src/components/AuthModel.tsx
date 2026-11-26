@@ -78,9 +78,9 @@ export const AuthModal = () => {
                         initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0.9, opacity: 0 }}
-                        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl z-[60] w-full max-w-md max-h-[90vh] overflow-y-auto"
+                        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl z-[60] w-[calc(100%-2rem)] max-w-md max-h-[90dvh] overflow-y-auto"
                     >
-                        <div className="p-8">
+                        <div className="p-5 sm:p-8">
                             {/* Header */}
                             <div className="flex justify-between items-center mb-6">
                                 <h2 className="text-2xl font-bold text-slate-800">
