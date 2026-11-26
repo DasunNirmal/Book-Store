@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useCart } from "../components/providers/CartProvider.tsx";
-import { CheckIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { CheckCircleIcon, CheckIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import dataService, { Order, User } from "../services/DataServices.ts";
 import { useAuth } from "../context/AuthContext.tsx";
 import { useToast } from "../context/ToastContext.tsx";
@@ -143,7 +143,7 @@ export const Checkout = () => {
                                 stiffness: 200,
                                 mass: 0.6
                             }}
-                            className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl z-50 max-h-[90vh] overflow-y-auto"
+                            className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl z-50 max-h-[92dvh] overflow-y-auto"
                         >
                             <div className="flex flex-col lg:flex-row h-full">
 
@@ -156,8 +156,8 @@ export const Checkout = () => {
                                 </button>
 
                                 {/* Left Side - Customer Details */}
-                                <div className="w-full lg:w-1/2 bg-stone-50 p-8">
-                                    <h2 className="text-2xl font-bold text-slate-800 mb-6">Customer Information</h2>
+                                <div className="w-full lg:w-1/2 bg-stone-50 p-4 pt-6 sm:p-8">
+                                    <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-6 pr-12">Customer Information</h2>
 
                                     {/* Contact Information */}
                                     <div className="mb-8">
@@ -165,6 +165,8 @@ export const Checkout = () => {
                                         <input
                                             type="email"
                                             name="email"
+                                            autoComplete="email"
+                                            inputMode="email"
                                             value={formData.email}
                                             onChange={handleInputChange}
                                             placeholder="Email Address"
@@ -243,6 +245,7 @@ export const Checkout = () => {
                                             <input
                                                 type="text"
                                                 name="postalCode"
+                                                autoComplete="postal-code"
                                                 value={formData.postalCode}
                                                 onChange={handleInputChange}
                                                 placeholder="Postal Code"
@@ -252,6 +255,7 @@ export const Checkout = () => {
                                         <input
                                             type="tel"
                                             name="phone"
+                                            autoComplete="tel"
                                             value={formData.phone}
                                             onChange={handleInputChange}
                                             placeholder="Phone"
@@ -289,6 +293,8 @@ export const Checkout = () => {
                                                     <input
                                                         type="text"
                                                         name="cardNumber"
+                                                        inputMode="numeric"
+                                                        autoComplete="cc-number"
                                                         value={formData.cardNumber}
                                                         onChange={handleInputChange}
                                                         placeholder="Card Number"
@@ -298,6 +304,8 @@ export const Checkout = () => {
                                                         <input
                                                             type="text"
                                                             name="expiry"
+                                                            inputMode="numeric"
+                                                            autoComplete="cc-exp"
                                                             value={formData.expiry}
                                                             onChange={handleInputChange}
                                                             placeholder="MM/YY"
@@ -306,6 +314,8 @@ export const Checkout = () => {
                                                         <input
                                                             type="text"
                                                             name="cvv"
+                                                            inputMode="numeric"
+                                                            autoComplete="cc-csc"
                                                             value={formData.cvv}
                                                             onChange={handleInputChange}
                                                             placeholder="CVV"
@@ -337,14 +347,22 @@ export const Checkout = () => {
                                 </div>
 
                                 {/* Right Side - Order Summary */}
-                                <div className="w-full lg:w-1/2 bg-stone-300 p-8">
-                                    <div className="rounded-xl shadow-sm p-6 sticky top-20">
-                                        <h2 className="text-2xl font-bold text-slate-800 mb-6">Order Summary</h2>
+                                <div className="w-full lg:w-1/2 bg-stone-300 p-4 sm:p-8">
+                                    <div className="rounded-xl shadow-sm p-2 sm:p-6 lg:sticky lg:top-20">
+                                        <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-4 sm:mb-6">Order Summary</h2>
 
                                         {/* Cart Items List */}
                                         <div className="overflow-y-auto mb-4">
+                                            <AnimatePresence initial={false}>
                                             {cartItems.map(item => (
-                                                <div key={item.title} className="flex justify-between py-2 border-b border-stone-100">
+                                                <motion.div
+                                                    key={item.title}
+                                                    layout
+                                                    initial={{ opacity: 0 }}
+                                                    animate={{ opacity: 1 }}
+                                                    exit={{ opacity: 0, x: -60, height: 0 }}
+                                                    transition={{ duration: 0.3 }}
+                                                    className="flex justify-between py-2 border-b border-stone-100 overflow-hidden">
                                                     <div className="flex items-center">
                                                         <img
                                                             src={item.image}
@@ -365,8 +383,9 @@ export const Checkout = () => {
                                                             <TrashIcon className="w-5 h-5" />
                                                         </button>
                                                     </span>
-                                                </div>
+                                                </motion.div>
                                             ))}
+                                            </AnimatePresence>
                                         </div>
 
                                         {/* Totals */}
@@ -392,8 +411,9 @@ export const Checkout = () => {
                                         {/* User Status Indicator */}
                                         {currentUser && (
                                             <div className="mb-4 p-3 bg-green-100 border border-green-300 rounded-lg">
-                                                <p className="text-sm text-green-800">
-                                                    ✅ Signed in as <strong>{currentUser.name}</strong>
+                                                <p className="flex items-center gap-2 text-sm text-green-800">
+                                                    <CheckCircleIcon className="w-5 h-5 shrink-0" />
+                                                    <span>Signed in as <strong>{currentUser.name}</strong></span>
                                                 </p>
                                             </div>
                                         )}
@@ -438,7 +458,7 @@ export const Checkout = () => {
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
-                            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl z-[65] w-full max-w-md"
+                            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl z-[65] w-[calc(100%-2rem)] max-w-md"
                         >
                             <div className="p-8 text-center">
                                 <div className="w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-4">
