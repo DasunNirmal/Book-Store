@@ -10,8 +10,7 @@ import { MyOrders } from "../components/MyOrders.tsx";
 import { Link } from "react-router";
 
 export const User = () => {
-    const { open } = useSidebar();
-    const sidebarWidth = open ? 240 : 80;
+    const { open, sidebarWidth } = useSidebar();
     const { currentUser, openAuthModal, updateProfile, deleteAccount } = useAuth();
 
     const [isEditing, setIsEditing] = useState(false);
@@ -80,10 +79,10 @@ export const User = () => {
                 initial={{ width: `calc(100% - ${sidebarWidth}px)` }}
                 animate={{ width: `calc(100% - ${sidebarWidth}px)` }}
                 transition={{ type: "spring", stiffness: 100, delay: open ? 0 : 0.5 }}
-                className='absolute top-0 right-0 p-8'
+                className='absolute top-16 lg:top-0 right-0 p-4 sm:p-6 lg:p-8'
             >
                 <div className="max-w-4xl mx-auto mb-8">
-                    <h1 className="text-3xl font-bold text-slate-800 mb-8">Account Settings</h1>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-6 sm:mb-8">Account Settings</h1>
 
                     {!currentUser ? (
                         /* Signed-out state */
@@ -105,9 +104,9 @@ export const User = () => {
                     ) : (
                         <>
                             {/* Profile Card */}
-                            <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-                                <div className="flex justify-between items-center mb-6">
-                                    <h2 className="text-2xl font-semibold text-slate-800">Profile Information</h2>
+                            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8">
+                                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+                                    <h2 className="text-xl sm:text-2xl font-semibold text-slate-800">Profile Information</h2>
                                     {!isEditing ? (
                                         <motion.button
                                             whileHover={{ scale: 1.05 }}
@@ -196,7 +195,7 @@ export const User = () => {
                             )}
 
                             {/* Danger Zone */}
-                            <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-rose-100">
+                            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 border-2 border-rose-100">
                                 <h2 className="text-xl font-semibold text-slate-800 mb-4">Danger Zone</h2>
                                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                                     <div>
