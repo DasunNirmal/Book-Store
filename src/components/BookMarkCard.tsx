@@ -4,6 +4,7 @@ import { TrashIcon } from "@heroicons/react/24/solid";
 import { EyeIcon } from "@heroicons/react/24/solid";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import {useCart} from "./providers/CartProvider.tsx";
 import {formatPrice} from "../utils/format.ts";
 
@@ -26,12 +27,17 @@ export const BookmarkCard = ({ id, title, author, price, image, description = "N
         <>
             {/* Table-style Bookmark Card */}
             <motion.div
-                className="w-full bg-white rounded-xl shadow-md overflow-hidden mb-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                layout
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, x: -80, height: 0, marginBottom: 0 }}
+                transition={{ duration: 0.3 }}
+                className="w-full bg-white rounded-xl shadow-md overflow-hidden mb-4 sm:mb-6 hover:shadow-xl"
                 whileHover={{ y: -2 }}
             >
-                <div className="flex flex-col md:flex-row">
+                <div className="flex flex-row">
                     {/* Book Cover */}
-                    <div className="w-full md:w-1/4 h-48 md:h-auto">
+                    <div className="w-28 sm:w-36 md:w-1/4 shrink-0 min-h-[10rem]">
                         <div
                             className="h-full w-full bg-cover bg-center"
                             style={{ backgroundImage: `url('${image}')` }}
@@ -39,16 +45,16 @@ export const BookmarkCard = ({ id, title, author, price, image, description = "N
                     </div>
 
                     {/* Book Details */}
-                    <div className="w-full md:w-3/4 p-4 flex flex-col">
+                    <div className="flex-1 min-w-0 md:w-3/4 p-3 md:p-4 flex flex-col">
                         <div className="flex-grow">
-                            <h3 className="text-xl font-bold text-slate-800">{title}</h3>
+                            <h3 className="text-lg md:text-xl font-bold text-slate-800 line-clamp-2">{title}</h3>
                             <p className="text-sm text-stone-600 mt-1">by {author}</p>
                             <span className="font-bold text-rose-500 text-lg mt-2 block">{formatPrice(price)}</span>
-                            <p className="text-gray-600 mt-3 line-clamp-2">{description}</p>
+                            <p className="text-gray-600 mt-2 md:mt-3 line-clamp-2 text-sm md:text-base">{description}</p>
                         </div>
 
                         {/* Action Buttons */}
-                        <div className="flex justify-end space-x-3 mt-4">
+                        <div className="flex justify-end space-x-3 mt-3 md:mt-4">
                             {/* View Button */}
                             <motion.button
                                 className="p-2 rounded-full cursor-pointer border-2 border-slate-700 text-slate-700 hover:bg-slate-100"
@@ -75,6 +81,7 @@ export const BookmarkCard = ({ id, title, author, price, image, description = "N
                 </div>
             </motion.div>
 
+            {createPortal(
             <AnimatePresence>
                 {isViewOpen && (
                     <>
@@ -97,9 +104,12 @@ export const BookmarkCard = ({ id, title, author, price, image, description = "N
                                 damping: 18,
                                 stiffness: 200, // Adjust this for speed (higher = faster)
                                 mass: 0.6       // Adjust this for weight (higher = slower)
-                            }} className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl z-50 max-h-[90vh] overflow-y-auto m-0"
+                            }} className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl z-50 max-h-[90dvh] overflow-y-auto m-0"
                         >
-                            <div className="p-6">
+                            <div className="p-4 sm:p-6">
+                                {/* Grab handle (mobile) */}
+                                <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-stone-300 lg:hidden" />
+
                                 {/* Close Button */}
                                 <button
                                     onClick={() => setIsViewOpen(false)}
@@ -113,14 +123,14 @@ export const BookmarkCard = ({ id, title, author, price, image, description = "N
                                     {/* Book Cover */}
                                     <div className="w-full md:w-1/3 shadow-lg rounded-xl">
                                         <div
-                                            className="h-64 md:h-80 rounded-xl shadow-md bg-cover bg-center"
+                                            className="h-56 md:h-80 rounded-xl shadow-md bg-cover bg-center"
                                             style={{ backgroundImage: `url('${image}')` }}
                                         ></div>
                                     </div>
 
                                     {/* Book Details */}
                                     <div className="w-full md:w-2/3">
-                                        <h2 className="text-3xl font-bold text-slate-800">{title}</h2>
+                                        <h2 className="text-2xl sm:text-3xl font-bold text-slate-800">{title}</h2>
                                         <p className="text-lg text-rose-500 mt-2">by {author}</p>
                                         <span className="text-2xl font-bold text-rose-500 block mt-4">{formatPrice(price)}</span>
 
@@ -129,16 +139,16 @@ export const BookmarkCard = ({ id, title, author, price, image, description = "N
                                             <p className="text-gray-600">{description}</p>
                                         </div>
 
-                                        <div className="mt-8 flex flex-wrap gap-4">
+                                        <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
                                             <motion.button
-                                                className="px-8 py-3 rounded-full cursor-pointer bg-slate-700 text-white hover:bg-slate-800 transition-colors"
+                                                className="w-full sm:w-auto px-8 py-3 rounded-full cursor-pointer bg-slate-700 text-white hover:bg-slate-800 transition-colors"
                                                 whileTap={{ scale: 0.95 }}
                                                 onClick={() => addToCart({ id, title, author, price, image, description })}
                                             >
                                                 Add to Cart
                                             </motion.button>
                                             <motion.button
-                                                className="px-8 py-3 rounded-full border-2 cursor-pointer border-rose-700 text-slate-700 hover:bg-rose-500 hover:font-bold hover:text-white transition-colors"
+                                                className="w-full sm:w-auto px-8 py-3 rounded-full border-2 cursor-pointer border-rose-700 text-slate-700 hover:bg-rose-500 hover:font-bold hover:text-white transition-colors"
                                                 whileTap={{ scale: 0.95 }}
                                                 onClick={() => buyNow({ id, title, author, price, image, description })}
                                             >
@@ -151,7 +161,9 @@ export const BookmarkCard = ({ id, title, author, price, image, description = "N
                         </motion.div>
                     </>
                 )}
-            </AnimatePresence>
+            </AnimatePresence>,
+            document.body
+            )}
         </>
     );
 };
