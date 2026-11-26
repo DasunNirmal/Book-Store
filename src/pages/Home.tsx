@@ -1,27 +1,27 @@
-import {motion} from "framer-motion";
+import {AnimatePresence, motion} from "framer-motion";
 import {useSidebar} from "../components/SIdebarContext.tsx";
 import {
     ArrowPathRoundedSquareIcon,
-    BookmarkIcon,
     CheckBadgeIcon,
     ShieldCheckIcon,
     TruckIcon
 } from "@heroicons/react/24/outline";
 import {ArrowRightIcon} from "@heroicons/react/24/solid";
-import {BookmarkIcon as BookmarkSolidIcon} from "@heroicons/react/24/solid";
 import {Link} from "react-router";
 import {useAdmin} from "../context/AdminContext";
-import {useCart} from "../components/providers/CartProvider.tsx";
-import {useBookmark} from "../components/providers/BookMarkProvider.tsx";
-import {formatPrice} from "../utils/format.ts";
+import {NewArrivalCard} from "../components/NewArrivalCard.tsx";
+import {HomeMobile} from "./HomeMobile.tsx";
 
+// Phones and tablets get their own layout; the desktop layout is unchanged
 export const Home = () => {
+    const {isMobile} = useSidebar();
+    return isMobile ? <HomeMobile/> : <HomeDesktop/>;
+};
 
-    const {open} = useSidebar();
-    const sidebarWidth = open ? 240 : 80;
+const HomeDesktop = () => {
+
+    const {open, sidebarWidth} = useSidebar();
     const {books} = useAdmin();
-    const {addToCart} = useCart();
-    const {toggleBookmark, isBookmarked} = useBookmark();
 
     // The four most recently added books
     const newArrivals = [...books].slice(-4).reverse();
@@ -137,33 +137,19 @@ export const Home = () => {
                 <motion.div className='newArrival self-baseline grid grid-cols-4 justify-items-center content-center justify-center'>
                 <h2 className="text-3xl absolute top-[15px] font-bold mt-9 text-[#3a3a3a]">New Arrivals</h2>
 
+                    <AnimatePresence initial={false}>
                     {newArrivals.map((book) => (
-                        <div key={book.id} className="relative w-[230px] h-[350px] mx-4 bg-white rounded-lg shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                            <div
-                                className="h-[220px] bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                                style={{ backgroundImage: `url('${book.image}')` }}
-                            ></div>
-                            <div className="p-3">
-                                <h3 className="font-semibold text-[#3a3a3a] truncate">{book.title}</h3>
-                                <p className="text-sm text-stone-600">{book.author}</p>
-                                <span className="font-bold text-rose-500">{formatPrice(book.price)}</span>
-                                <div className="flex justify-between items-center mt-2">
-                                    <div className="flex space-x-2">
-                                        <button
-                                            onClick={() => addToCart({id: book.id, title: book.title, author: book.author, price: book.price, image: book.image, description: book.description})}
-                                            className="px-10 py-2 cursor-pointer rounded-full bg-slate-700 text-white text-sm hover:bg-slate-800 transition-all duration-300 hover:font-medium transform hover:scale-[1.02]">
-                                            Add to Cart
-                                        </button>
-                                        <button
-                                            onClick={() => toggleBookmark({id: book.id, title: book.title, author: book.author, price: book.price, image: book.image, description: book.description})}
-                                            className="p-2 cursor-pointer rounded-full bg-rose-500 text-white hover:bg-rose-700 transition-all duration-300 transform hover:scale-110">
-                                            {isBookmarked(book.title) ? <BookmarkSolidIcon className="w-5 h-5" /> : <BookmarkIcon className="w-5 h-5" />}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <motion.div
+                            key={book.id}
+                            initial={{opacity: 0}}
+                            animate={{opacity: 1}}
+                            exit={{opacity: 0}}
+                            transition={{duration: 0.3}}
+                        >
+                            <NewArrivalCard book={book}/>
+                        </motion.div>
                     ))}
+                    </AnimatePresence>
                 </motion.div>
             </motion.div>
 
