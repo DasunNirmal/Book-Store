@@ -1,4 +1,4 @@
-import {motion} from "framer-motion";
+import {AnimatePresence, motion} from "framer-motion";
 import {useSidebar} from "../components/SIdebarContext.tsx";
 import {useCart} from "../components/providers/CartProvider.tsx";
 import {XMarkIcon} from "@heroicons/react/24/solid";
@@ -8,8 +8,7 @@ import {formatPrice} from "../utils/format.ts";
 
 export const Cart = () => {
 
-    const { open } = useSidebar();
-    const sidebarWidth = open ? 240 : 80;
+    const { open, sidebarWidth } = useSidebar();
     const { cartItems, removeFromCart, updateQuantity } = useCart();
     const { openCheckout } = useCart();
 
@@ -21,16 +20,88 @@ export const Cart = () => {
                 initial={{ width: `calc(100% - ${sidebarWidth}px)` }}
                 animate={{ width: `calc(100% - ${sidebarWidth}px)` }}
                 transition={{ type: "spring", stiffness: 100, delay: open ? 0 : 0.5 }}
-                className='absolute top-0 right-0 p-8'
+                className='absolute top-16 lg:top-0 right-0 p-4 sm:p-6 lg:p-8'
             >
-                <h1 className="text-3xl font-bold text-slate-800 mb-8">Your Cart</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-6 lg:mb-8">Your Cart</h1>
 
                 {cartItems.length === 0 ? (
-                    <p className="text-gray-500 text-xl mb-35 flex items-center justify-center h-64 bg-white rounded-xl shadow-sm">Your cart is empty</p>
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-gray-500 text-xl mb-35 flex items-center justify-center h-64 bg-white rounded-xl shadow-sm">
+                        Your cart is empty
+                    </motion.p>
                 ) : (
                     <>
-                        {/* Cart Items Table */}
-                        <div className="overflow-x-auto">
+                        {/* Mobile: one card per book */}
+                        <div className="lg:hidden">
+                            <AnimatePresence initial={false}>
+                                {cartItems.map((item) => (
+                                    <motion.div
+                                        key={item.title}
+                                        layout
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, x: -80, height: 0, marginBottom: 0 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="flex gap-3 bg-white rounded-xl shadow-md p-3 mb-4 overflow-hidden"
+                                    >
+                                        <img
+                                            src={item.image}
+                                            alt={item.title}
+                                            className="w-20 h-28 object-cover rounded shrink-0"
+                                        />
+                                        <div className="flex-1 min-w-0 flex flex-col">
+                                            <div className="flex items-start justify-between gap-2">
+                                                <div className="min-w-0">
+                                                    <h3 className="font-semibold text-slate-800 line-clamp-2">{item.title}</h3>
+                                                    <p className="text-sm text-stone-600 truncate">{item.author}</p>
+                                                </div>
+                                                <motion.button
+                                                    whileTap={{ scale: 0.85 }}
+                                                    onClick={() => removeFromCart(item.title)}
+                                                    aria-label={`Remove ${item.title}`}
+                                                    className="p-2 -mr-1 -mt-1 rounded-full text-rose-500 active:bg-rose-100 cursor-pointer shrink-0"
+                                                >
+                                                    <XMarkIcon className="w-5 h-5" />
+                                                </motion.button>
+                                            </div>
+
+                                            <span className="text-rose-500 font-medium mt-1">{formatPrice(item.price)}</span>
+
+                                            <div className="mt-auto pt-2 flex items-center justify-between">
+                                                <div className="flex items-center rounded-full border-2 border-slate-700">
+                                                    <motion.button
+                                                        whileTap={{ scale: 0.85 }}
+                                                        onClick={() => updateQuantity(item.title, item.quantity - 1)}
+                                                        disabled={item.quantity <= 1}
+                                                        aria-label="Decrease quantity"
+                                                        className="p-2 rounded-full cursor-pointer disabled:opacity-40"
+                                                    >
+                                                        <MinusIcon className="w-4 h-4 text-slate-700" />
+                                                    </motion.button>
+                                                    <span className="w-7 text-center text-sm">{item.quantity}</span>
+                                                    <motion.button
+                                                        whileTap={{ scale: 0.85 }}
+                                                        onClick={() => updateQuantity(item.title, item.quantity + 1)}
+                                                        aria-label="Increase quantity"
+                                                        className="p-2 rounded-full cursor-pointer"
+                                                    >
+                                                        <PlusIcon className="w-4 h-4 text-slate-700" />
+                                                    </motion.button>
+                                                </div>
+                                                <span className="font-bold text-slate-800">
+                                                    {formatPrice(item.price * item.quantity)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </AnimatePresence>
+                        </div>
+
+                        {/* Desktop: table */}
+                        <div className="hidden lg:block overflow-x-auto">
                             <table className="w-full border-collapse">
                                 <thead>
                                 <tr className="border-b-2 border-slate-800">
@@ -42,8 +113,15 @@ export const Cart = () => {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {cartItems.map((item) => (
-                                    <tr key={item.title} className="border-b border-slate-800">
+                                <AnimatePresence initial={false}>
+                                {cartItems.map((item, index) => (
+                                    <motion.tr
+                                        key={item.title}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        transition={{ delay: index * 0.05 }}
+                                        className="border-b border-slate-800">
                                         <td className="py-4">
                                             <div className="flex items-center">
                                                 <img
@@ -87,16 +165,17 @@ export const Cart = () => {
                                                 <XMarkIcon className="w-5 h-5 cursor-pointer" />
                                             </button>
                                         </td>
-                                    </tr>
+                                    </motion.tr>
                                 ))}
+                                </AnimatePresence>
                                 </tbody>
                             </table>
                         </div>
 
                         {/* Subtotal and Checkout */}
-                        <div className="mt-8 border-t border-slate-200 pt-6">
+                        <div className="mt-6 lg:mt-8 lg:border-t border-slate-200 lg:pt-6">
                             <div className="flex justify-end">
-                                <div className="w-64">
+                                <div className="w-full lg:w-64 bg-white lg:bg-transparent rounded-xl shadow-md lg:shadow-none p-4 lg:p-0">
                                     <div className="flex justify-between mb-4">
                                         <span className="text-slate-700">Subtotal:</span>
                                         <span className="text-rose-500 font-bold">{formatPrice(subtotal)}</span>
@@ -114,7 +193,9 @@ export const Cart = () => {
                         </div>
                     </>
                 )}
-                <Footer />
+                <div className="mt-12 lg:mt-0">
+                    <Footer />
+                </div>
             </motion.div>
         </motion.div>
     );
