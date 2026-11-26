@@ -70,7 +70,75 @@ export const UserManagement = () => {
 
             {/* Users Table */}
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                <div className="overflow-x-auto">
+                {/* Mobile: one card per user */}
+                <div className="lg:hidden">
+                    <AnimatePresence initial={false}>
+                        {filteredUsers.map((user) => (
+                            <motion.div
+                                key={user.id}
+                                layout
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0, x: -60, height: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className="p-4 border-b border-stone-200 overflow-hidden"
+                            >
+                                <div className="flex items-center">
+                                    <div className="w-10 h-10 bg-rose-100 rounded-full flex items-center justify-center shrink-0">
+                                        <UserIcon className="w-5 h-5 text-rose-500" />
+                                    </div>
+                                    <div className="ml-3 min-w-0">
+                                        <div className="text-sm font-medium text-slate-800 truncate">{user.name}</div>
+                                        <div className="text-xs text-stone-600 truncate">{user.email}</div>
+                                        {user.phone && <div className="text-xs text-stone-500">{user.phone}</div>}
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center justify-between mt-3">
+                                    <select
+                                        value={user.role}
+                                        onChange={(e) => handleRoleChange(user.id, e.target.value as 'user' | 'admin')}
+                                        className={`text-sm px-3 py-1 rounded-full border ${
+                                            user.role === 'admin'
+                                                ? 'bg-rose-100 text-rose-800 border-rose-200'
+                                                : 'bg-blue-100 text-blue-800 border-blue-200'
+                                        }`}
+                                    >
+                                        <option value="user">User</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+
+                                    <div className="flex space-x-2">
+                                        <motion.button
+                                            onClick={() => handleEdit(user)}
+                                            aria-label="Edit user"
+                                            className="p-2 rounded-full border-2 border-slate-700 text-slate-700 hover:bg-slate-100 cursor-pointer"
+                                            whileTap={{ scale: 0.9 }}
+                                        >
+                                            <PencilIcon className="w-4 h-4" />
+                                        </motion.button>
+                                        <motion.button
+                                            onClick={() => deleteUser(user.id)}
+                                            disabled={user.role === 'admin'}
+                                            aria-label="Delete user"
+                                            className={`p-2 rounded-full ${
+                                                user.role === 'admin'
+                                                    ? 'bg-gray-300 cursor-not-allowed'
+                                                    : 'bg-rose-500 hover:bg-rose-700 cursor-pointer'
+                                            } text-white`}
+                                            whileTap={{ scale: user.role !== 'admin' ? 0.9 : 1 }}
+                                        >
+                                            <TrashIcon className="w-4 h-4" />
+                                        </motion.button>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </AnimatePresence>
+                </div>
+
+                {/* Desktop: table */}
+                <div className="hidden lg:block overflow-x-auto">
                     <table className="w-full">
                         <thead className="bg-stone-50">
                         <tr>
