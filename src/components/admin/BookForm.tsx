@@ -35,15 +35,6 @@ export const BookForm = ({ book, onClose }: BookFormProps) => {
         }
     }, [book]);
 
-    /*const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (book) {
-            updateBook(book.id, formData);
-        } else {
-            addBook(formData);
-        }
-        onClose();
-    };*/
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -76,7 +67,7 @@ export const BookForm = ({ book, onClose }: BookFormProps) => {
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
-                className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl z-50 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+                className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl z-50 w-[calc(100%-2rem)] max-w-2xl max-h-[90dvh] overflow-y-auto"
             >
                 <div className="p-6">
                     {/* Header */}
