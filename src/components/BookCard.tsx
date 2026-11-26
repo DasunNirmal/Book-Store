@@ -3,6 +3,7 @@ import { BookmarkIcon } from "@heroicons/react/24/outline";
 import { BookmarkIcon as BookmarkSolidIcon } from "@heroicons/react/24/solid";
 import { EyeIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import {useBookmark} from "./providers/BookMarkProvider.tsx";
 import {useCart} from "./providers/CartProvider.tsx";
 import {formatPrice} from "../utils/format.ts";
@@ -39,21 +40,24 @@ export const BookCard = ({ id, title, author, price, image, description = "This 
     return (
         <>
             {/* Book Card */}
-            <div className="relative w-full h-[430px] bg-white rounded-xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
-                <div
-                    className="h-[250px] bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                    style={{ backgroundImage: `url('${image}')` }}
-                ></div>
-                <div className="p-4">
-                    <h3 className="font-semibold text-lg text-slate-800 truncate">{title}</h3>
-                    <p className="text-sm text-stone-600 mt-1">{author}</p>
-                    <span className="font-bold text-rose-500 text-lg mt-2 block">{formatPrice(price)}</span>
+            {/* Mobile: compact horizontal card. Desktop: tall vertical card. */}
+            <div className="relative w-full flex lg:block lg:h-[430px] bg-white rounded-xl shadow-lg overflow-hidden group transition-all duration-300 hover:shadow-xl lg:hover:-translate-y-2">
+                <div className="w-24 sm:w-28 shrink-0 self-stretch lg:w-full lg:h-[250px] overflow-hidden">
+                    <div
+                        className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                        style={{ backgroundImage: `url('${image}')` }}
+                    ></div>
+                </div>
+                <div className="p-3 lg:p-4 flex-1 min-w-0">
+                    <h3 className="font-semibold text-base lg:text-lg text-slate-800 line-clamp-2 lg:truncate">{title}</h3>
+                    <p className="text-sm text-stone-600 mt-1 truncate">{author}</p>
+                    <span className="font-bold text-rose-500 text-lg mt-1 lg:mt-2 block">{formatPrice(price)}</span>
 
-                    <div className="flex justify-between items-center mt-4">
-                        <div className="flex space-x-3">
+                    <div className="flex justify-between items-center mt-3 lg:mt-4">
+                        <div className="flex w-full lg:w-auto gap-2 lg:gap-0 lg:space-x-3">
                             {/* Add to Cart Button */}
                             <motion.button
-                                className="px-6 py-2 cursor-pointer rounded-full text-white text-sm"
+                                className="flex-1 lg:flex-none px-3 lg:px-6 py-2 cursor-pointer rounded-full text-white text-sm whitespace-nowrap"
                                 style={{ backgroundColor: "#334155" }}
                                 whileHover={{
                                     backgroundColor: "#1e293b",
@@ -69,7 +73,7 @@ export const BookCard = ({ id, title, author, price, image, description = "This 
 
                             {/* View Icon Button */}
                             <motion.button
-                                className="p-2.5 cursor-pointer rounded-full border-2 border-slate-700 text-slate-700"
+                                className="p-2 lg:p-2.5 shrink-0 cursor-pointer rounded-full border-2 border-slate-700 text-slate-700"
                                 whileHover={{
                                     backgroundColor: "#f1f5f9",
                                     scale: 1.1
@@ -78,12 +82,12 @@ export const BookCard = ({ id, title, author, price, image, description = "This 
                                 onClick={() => setIsViewOpen(true)}
                                 transition={{ type: "spring", stiffness: 300 }}
                             >
-                                <EyeIcon className="w-6 h-6" />
+                                <EyeIcon className="w-5 h-5 lg:w-6 lg:h-6" />
                             </motion.button>
 
                             {/* Bookmark Button */}
                             <motion.button
-                                className="p-2.5 cursor-pointer rounded-full text-white"
+                                className="p-2 lg:p-2.5 shrink-0 cursor-pointer rounded-full text-white"
                                 style={{ backgroundColor: "#f43f5e" }}
                                 whileHover={{
                                     backgroundColor: "#be123c",
@@ -93,7 +97,7 @@ export const BookCard = ({ id, title, author, price, image, description = "This 
                                 transition={{ type: "spring", stiffness: 300 }}
                                 onClick={handleBookmark}
                             >
-                                {isBooked ? <BookmarkSolidIcon className="w-6 h-6" /> : <BookmarkIcon className="w-6 h-6" />}
+                                {isBooked ? <BookmarkSolidIcon className="w-5 h-5 lg:w-6 lg:h-6" /> : <BookmarkIcon className="w-5 h-5 lg:w-6 lg:h-6" />}
                             </motion.button>
                         </div>
                     </div>
@@ -101,6 +105,7 @@ export const BookCard = ({ id, title, author, price, image, description = "This 
             </div>
 
             {/* Book Details Modal */}
+            {createPortal(
             <AnimatePresence>  {/*animate an element just before it will be removed (unmounted) from the DOM tree*/}
                 {isViewOpen && (
                     <>
@@ -123,9 +128,12 @@ export const BookCard = ({ id, title, author, price, image, description = "This 
                                 damping: 18,
                                 stiffness: 200, // Adjust this for speed (higher = faster)
                                 mass: 0.6       // Adjust this for weight (higher = slower)
-                        }} className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl z-50 max-h-[90vh] overflow-y-auto"
+                        }} className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl z-50 max-h-[90dvh] overflow-y-auto"
                         >
-                            <div className="p-6">
+                            <div className="p-4 sm:p-6">
+                                {/* Grab handle (mobile) */}
+                                <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-stone-300 lg:hidden" />
+
                                 {/* Close Button */}
                                 <button
                                     onClick={() => setIsViewOpen(false)}
@@ -139,14 +147,14 @@ export const BookCard = ({ id, title, author, price, image, description = "This 
                                     {/* Book Cover */}
                                     <div className="w-full md:w-1/3 shadow-lg rounded-xl">
                                         <div
-                                            className="h-64 md:h-80 rounded-xl shadow-md bg-cover bg-center"
+                                            className="h-56 md:h-80 rounded-xl shadow-md bg-cover bg-center"
                                             style={{ backgroundImage: `url('${image}')` }}
                                         ></div>
                                     </div>
 
                                     {/* Book Details */}
                                     <div className="w-full md:w-2/3">
-                                        <h2 className="text-3xl font-bold text-slate-800">{title}</h2>
+                                        <h2 className="text-2xl sm:text-3xl font-bold text-slate-800">{title}</h2>
                                         <p className="text-lg text-rose-500 mt-2">by {author}</p>
                                         <span className="text-2xl font-bold text-rose-500 block mt-4">{formatPrice(price)}</span>
 
@@ -155,16 +163,16 @@ export const BookCard = ({ id, title, author, price, image, description = "This 
                                             <p className="text-gray-600">{description}</p>
                                         </div>
 
-                                        <div className="mt-8 flex flex-wrap gap-4">
+                                        <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
                                             <motion.button
-                                                className="px-8 py-3 rounded-full cursor-pointer bg-slate-700 text-white hover:bg-slate-800 transition-colors"
+                                                className="w-full sm:w-auto px-8 py-3 rounded-full cursor-pointer bg-slate-700 text-white hover:bg-slate-800 transition-colors"
                                                 whileTap={{ scale: 0.95 }}
                                                 onClick={handleAddToCart}
                                             >
                                                 Add to Cart
                                             </motion.button>
                                             <motion.button
-                                                className="px-8 py-3 rounded-full border-2 cursor-pointer border-rose-700 text-slate-700 hover:bg-rose-500 hover:font-bold hover:text-white transition-colors"
+                                                className="w-full sm:w-auto px-8 py-3 rounded-full border-2 cursor-pointer border-rose-700 text-slate-700 hover:bg-rose-500 hover:font-bold hover:text-white transition-colors"
                                                 whileTap={{ scale: 0.95 }}
                                                 onClick={handleBuyNow}
                                             >
@@ -177,7 +185,9 @@ export const BookCard = ({ id, title, author, price, image, description = "This 
                         </motion.div>
                     </>
                 )}
-            </AnimatePresence>
+            </AnimatePresence>,
+            document.body
+            )}
         </>
     );
 };
