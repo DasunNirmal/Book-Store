@@ -1,4 +1,4 @@
-import {motion} from "framer-motion";
+import {AnimatePresence, motion} from "framer-motion";
 import {useSidebar} from "../components/SIdebarContext.tsx";
 import {CheckIcon, MagnifyingGlassIcon} from "@heroicons/react/24/outline";
 import {useState} from "react";
@@ -12,8 +12,7 @@ export const Discover = () => {
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [searchInput, setSearchInput] = useState("");
     const [query, setQuery] = useState("");
-    const { open } = useSidebar();
-    const sidebarWidth = open ? 240 : 80;
+    const { open, sidebarWidth } = useSidebar();
     const { books } = useAdmin();
 
     const bookCategories = [
@@ -68,10 +67,10 @@ export const Discover = () => {
                 initial={{ width: `calc(100% - ${sidebarWidth}px)` }}
                 animate={{ width: `calc(100% - ${sidebarWidth}px)` }}
                 transition={{ type: "spring", stiffness: 100, delay: open ? 0 : 0.5 }}
-                className='absolute top-0 right-0'>
+                className='absolute top-16 lg:top-0 right-0'>
 
                 {/*Search Bar*/}
-                <div className="relative top-0 z-50 w-full py-4 px-8">
+                <div className="relative top-0 z-30 w-full py-4 px-4 lg:px-8 lg:z-50">
                     <div className="relative w-full max-w-md mx-auto">
                         <motion.div
                             className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
@@ -95,7 +94,7 @@ export const Discover = () => {
                             onClick={applySearch}
                             transition={{ type: "spring", stiffness: 300 }}
                             whileTap={{ scale: 0.95, boxShadow: "0 0 8px rgba(0,0,0,0.2)" }}
-                            className="absolute cursor-pointer inset-y-0 right-[-100px] flex items-center px-4 bg-rose-500 text-white rounded-full hover:bg-rose-700 transition-colors mr-1 active:bg-rose-800">
+                            className="absolute cursor-pointer inset-y-0 right-0 my-1 lg:my-0 lg:right-[-100px] flex items-center px-4 bg-rose-500 text-white rounded-full hover:bg-rose-700 transition-colors mr-1 active:bg-rose-800">
                             Search
                         </motion.button>
 
@@ -103,9 +102,32 @@ export const Discover = () => {
                 </div>
 
                 {/*categories*/}
-                <div className="p-8">
-                    <h2 className="text-2xl font-semibold text-slate-700 mb-6">Browse Categories</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                <div className="p-4 lg:p-8">
+                    <h2 className="text-xl lg:text-2xl font-semibold text-slate-700 mb-4 lg:mb-6">Browse Categories</h2>
+
+                    {/* Mobile: swipeable chips */}
+                    <div className="lg:hidden flex gap-2 overflow-x-auto -mx-4 px-4 pb-2 snap-x [scrollbar-width:none]">
+                        {bookCategories.map((category) => {
+                            const selected = selectedCategories.includes(category);
+                            return (
+                                <motion.button
+                                    key={category}
+                                    whileTap={{ scale: 0.94 }}
+                                    onClick={() => toggleCategory(category)}
+                                    className={`shrink-0 snap-start px-4 py-2 rounded-full border-2 text-sm cursor-pointer transition-colors ${
+                                        selected
+                                            ? 'bg-rose-500 border-rose-500 text-white'
+                                            : 'border-slate-700 text-slate-700 bg-white'
+                                    }`}
+                                >
+                                    {category}
+                                </motion.button>
+                            );
+                        })}
+                    </div>
+
+                    {/* Desktop: checkbox grid */}
+                    <div className="hidden lg:grid grid-cols-5 gap-4">
                         {bookCategories.map((category) => (
                             <motion.div
                                 key={category}
@@ -130,9 +152,9 @@ export const Discover = () => {
                 </div>
 
                 {/* Books Grid Section */}
-                <div className="p-8 pt-0">
-                    <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-2xl font-semibold text-slate-700">Featured Books</h2>
+                <div className="p-4 pt-2 lg:p-8 lg:pt-0">
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-4 lg:mb-6">
+                        <h2 className="text-xl lg:text-2xl font-semibold text-slate-700">Featured Books</h2>
                         {hasActiveFilters && (
                             <div className="flex items-center gap-4">
                                 <span className="text-stone-600">
@@ -147,18 +169,28 @@ export const Discover = () => {
                             </div>
                         )}
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 lg:gap-8 2xl:gap-10">
+                        <AnimatePresence initial={false}>
                         {filteredBooks.map((book) => (
-                            <BookCard
+                            <motion.div
                                 key={book.id}
-                                id={book.id}
-                                title={book.title}
-                                author={book.author}
-                                price={book.price}
-                                image={book.image}
-                                description={book.description}
-                            />
+                                layout
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <BookCard
+                                    id={book.id}
+                                    title={book.title}
+                                    author={book.author}
+                                    price={book.price}
+                                    image={book.image}
+                                    description={book.description}
+                                />
+                            </motion.div>
                         ))}
+                        </AnimatePresence>
                     </div>
                     {filteredBooks.length === 0 && (
                         <div className="text-center py-12">
