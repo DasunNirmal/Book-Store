@@ -47,7 +47,59 @@ export const OrderManagement = () => {
 
             {/* Orders Table */}
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                <div className="overflow-x-auto">
+                {/* Mobile: one card per order */}
+                <div className="lg:hidden">
+                    <AnimatePresence initial={false}>
+                        {filteredOrders.map((order) => (
+                            <motion.div
+                                key={order.id}
+                                layout
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0, x: -60, height: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className="p-4 border-b border-stone-200 overflow-hidden"
+                            >
+                                <div className="flex items-start justify-between gap-3">
+                                    <div className="min-w-0">
+                                        <div className="text-sm font-medium text-slate-800">#{order.id.slice(-6)}</div>
+                                        <div className="text-sm text-stone-600 truncate">{order.userName}</div>
+                                        <div className="text-xs text-stone-500">
+                                            {order.books.length} item{order.books.length !== 1 ? 's' : ''} · {new Date(order.createdAt).toLocaleDateString()}
+                                        </div>
+                                    </div>
+                                    <div className="text-sm font-bold text-rose-500 shrink-0">{formatPrice(order.total)}</div>
+                                </div>
+
+                                <div className="flex items-center justify-between mt-3">
+                                    <select
+                                        value={order.status}
+                                        onChange={(e) => handleStatusChange(order.id, e.target.value as Order['status'])}
+                                        className={`text-sm px-3 py-1 rounded-full border ${statusBadgeClass(order.status)}`}
+                                    >
+                                        <option value="pending">Pending</option>
+                                        <option value="processing">Processing</option>
+                                        <option value="shipped">Shipped</option>
+                                        <option value="delivered">Delivered</option>
+                                        <option value="cancelled">Cancelled</option>
+                                    </select>
+
+                                    <motion.button
+                                        onClick={() => setViewingOrderId(order.id)}
+                                        aria-label="View order"
+                                        className="p-2 rounded-full border-2 border-slate-700 text-slate-700 hover:bg-slate-100 cursor-pointer"
+                                        whileTap={{ scale: 0.9 }}
+                                    >
+                                        <EyeIcon className="w-4 h-4" />
+                                    </motion.button>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </AnimatePresence>
+                </div>
+
+                {/* Desktop: table */}
+                <div className="hidden lg:block overflow-x-auto">
                     <table className="w-full">
                         <thead className="bg-stone-50">
                         <tr>
