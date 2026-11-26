@@ -18,9 +18,9 @@ export const MyOrders = ({ userId }: { userId: string }) => {
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return (
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+        <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8">
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-semibold text-slate-800">My Orders</h2>
+                <h2 className="text-xl sm:text-2xl font-semibold text-slate-800">My Orders</h2>
                 <span className="text-stone-600">
                     {myOrders.length} {myOrders.length === 1 ? 'order' : 'orders'}
                 </span>
@@ -53,7 +53,7 @@ export const MyOrders = ({ userId }: { userId: string }) => {
                             <motion.div
                                 key={order.id}
                                 layout
-                                className="border-2 border-stone-200 rounded-xl p-5"
+                                className="border-2 border-stone-200 rounded-xl p-3 sm:p-5"
                             >
                                 {/* Order header */}
                                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
