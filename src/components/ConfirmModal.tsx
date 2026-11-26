@@ -32,9 +32,9 @@ export const ConfirmModal = ({
                         initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0.9, opacity: 0 }}
-                        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl z-[70] w-full max-w-md"
+                        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl z-[70] w-[calc(100%-2rem)] max-w-md"
                     >
-                        <div className="p-8 text-center">
+                        <div className="p-6 sm:p-8 text-center">
                             <div className="w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <ExclamationTriangleIcon className="w-8 h-8 text-rose-500" />
                             </div>
