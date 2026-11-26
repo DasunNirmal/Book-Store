@@ -36,10 +36,10 @@ const AdminPanel = () => {
         >
             {/* Admin Header */}
             <div className="bg-white shadow-sm border-b border-stone-200">
-                <div className="px-8 py-6">
+                <div className="px-4 sm:px-8 py-4 sm:py-6">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h1 className="text-3xl font-bold text-slate-800">Admin Dashboard</h1>
+                            <h1 className="text-2xl sm:text-3xl font-bold text-slate-800">Admin Dashboard</h1>
                             <p className="text-stone-600 mt-2">Manage your bookstore efficiently</p>
                         </div>
                         <span className="px-3 py-1 bg-rose-100 text-rose-800 rounded-full text-sm font-medium">
@@ -49,15 +49,15 @@ const AdminPanel = () => {
                 </div>
 
                 {/* Tab Navigation */}
-                <div className="px-8">
-                    <div className="flex items-center space-x-1">
+                <div className="px-4 sm:px-8">
+                    <div className="flex items-center space-x-1 overflow-x-auto [scrollbar-width:none]">
 
                         {/* Admin Tabs */}
                         {tabs.map((tab) => (
                             <motion.button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`flex cursor-pointer items-center px-6 py-3 rounded-t-lg text-sm font-medium transition-all ${
+                                className={`flex cursor-pointer items-center shrink-0 whitespace-nowrap px-4 sm:px-6 py-3 rounded-t-lg text-sm font-medium transition-all ${
                                     activeTab === tab.id
                                         ? 'bg-rose-500 text-white'
                                         : 'text-slate-700 hover:text-rose-500 hover:bg-rose-50'
@@ -73,7 +73,7 @@ const AdminPanel = () => {
                         {/* Back to Store Button */}
                         <Link to="/">
                             <motion.button
-                                className="flex items-center cursor-pointer px-4 py-3 mr-4 text-slate-700 hover:text-rose-500 transition-colors rounded-t-lg hover:bg-rose-50"
+                                className="flex items-center shrink-0 whitespace-nowrap cursor-pointer px-4 py-3 mr-4 text-slate-700 hover:text-rose-500 transition-colors rounded-t-lg hover:bg-rose-50"
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                             >
@@ -86,7 +86,7 @@ const AdminPanel = () => {
             </div>
 
             {/* Tab Content */}
-            <div className="p-8">
+            <div className="p-4 sm:p-8">
                 {activeTab === 'dashboard' && <AdminStats />}
                 {activeTab === 'books' && <BookManagement />}
                 {activeTab === 'users' && <UserManagement />}
@@ -96,7 +96,7 @@ const AdminPanel = () => {
     );
 };
 
-// Only signed-in admins can see the dashboard and must be a admin
+// Only signed-in admins can see the dashboard
 export const AdminDashboard = () => {
     const { currentUser, openAuthModal } = useAuth();
 
