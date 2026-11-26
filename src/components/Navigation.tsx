@@ -10,7 +10,6 @@ import {Cursor} from "./Cursor.tsx";
 import {motion} from "framer-motion";
 import {Dispatch, SetStateAction, useState} from "react";
 import {Link, useLocation} from "react-router";
-import {SidebarContext} from "./SIdebarContext.tsx";
 import {useAuth} from "../context/AuthContext.tsx";
 
 export const Navigation = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) => {
@@ -34,7 +33,6 @@ export const Navigation = ({ open, setOpen }: { open: boolean, setOpen: Dispatch
 
     return (
         <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}>
-            <SidebarContext.Provider value={{open}}>
                 {/*Main Container*/}
                 <motion.div animate={{width: open ? "240px" : "80px"}}
                             transition={{type: "spring", stiffness: 100, delay: open ? 0 : 0.5}}
@@ -123,7 +121,6 @@ export const Navigation = ({ open, setOpen }: { open: boolean, setOpen: Dispatch
                         </div>
                     </motion.div>
                 </motion.div>
-            </SidebarContext.Provider>
         </motion.div>
     )
 }
